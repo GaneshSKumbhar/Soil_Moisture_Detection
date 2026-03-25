@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SoilSense — Complete Project Setup Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg: #0a0f0d; --bg2: #111a14; --card: #1a2820;
+    --border: #2a3f30; --green: #4ade80; --amber: #fbbf24;
+    --blue: #60a5fa; --red: #f87171; --purple: #c084fc;
+    --text: #e2f5e8; --muted: #6b8f72;
+    --mono: 'Space Mono', monospace; --sans: 'DM Sans', sans-serif;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: var(--sans); line-height: 1.7; }
+
+  /* SIDEBAR NAV */
+  .sidebar {
+    position: fixed; top: 0; left: 0; width: 240px; height: 100vh;
+    background: var(--bg2); border-right: 1px solid var(--border);
+    overflow-y: auto; z-index: 10; padding: 24px 0;
+  }
+  .sidebar-logo {
+    padding: 0 20px 20px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 16px;
+  }
+  .sidebar-logo h1 { font-family: var(--mono); font-size: 0.95rem; color: var(--green); }
+  .sidebar-logo p  { font-size: 0.7rem; color: var(--muted); font-family: var(--mono); margin-top: 2px; }
+  .nav-section { padding: 0 12px; margin-bottom: 8px; }
+  .nav-label {
+    font-size: 0.6rem; font-family: var(--mono); text-transform: uppercase;
+    letter-spacing: 0.1em; color: var(--muted); padding: 6px 8px; display: block;
+  }
+  .nav-link {
+    display: flex; align-items: center; gap: 8px;
+    padding: 7px 10px; border-radius: 8px; text-decoration: none;
+    color: var(--muted); font-size: 0.78rem; transition: all 0.2s; cursor: pointer;
+  }
+  .nav-link:hover, .nav-link.active { background: var(--card); color: var(--text); }
+  .nav-link .step-num {
+    width: 18px; height: 18px; border-radius: 50%; background: var(--border);
+    font-family: var(--mono); font-size: 0.6rem; display: flex;
+    align-items: center; justify-content: center; flex-shrink: 0;
+    color: var(--muted);
+  }
+  .nav-link.done .step-num { background: var(--green); color: #0a0f0d; }
+
+  /* MAIN */
+  .main { margin-left: 240px; padding: 40px 48px; max-width: 900px; }
+
+  /* PROGRESS BAR */
+  .progress-bar {
+    position: fixed; top: 0; left: 240px; right: 0; height: 3px;
+    background: var(--border); z-index: 20;
+  }
+  .progress-fill { height: 100%; background: var(--green); width: 0%; transition: width 0.3s; }
+
+  /* SECTION */
+  .section { margin-bottom: 64px; scroll-margin-top: 40px; }
+  .section-header {
+    display: flex; align-items: center; gap: 14px;
+    margin-bottom: 28px; padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-num {
+    width: 36px; height: 36px; border-radius: 10px;
+    background: var(--green); color: #0a0f0d;
+    font-family: var(--mono); font-weight: 700; font-size: 0.85rem;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .section-title { font-size: 1.3rem; font-weight: 700; }
+  .section-sub   { font-size: 0.78rem; color: var(--muted); margin-top: 2px; }
+
+  /* CARDS */
+  .card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 16px; padding: 24px; margin-bottom: 16px;
+  }
+  .card-title {
+    font-family: var(--mono); font-size: 0.72rem; text-transform: uppercase;
+    letter-spacing: 0.1em; color: var(--muted); margin-bottom: 14px;
+    display: flex; align-items: center; gap: 8px;
+  }
+
+  /* CODE BLOCKS */
+  .code-block {
+    background: #050a07; border: 1px solid var(--border);
+    border-radius: 12px; overflow: hidden; margin: 12px 0;
+  }
+  .code-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 8px 16px; background: var(--bg2); border-bottom: 1px solid var(--border);
+  }
+  .code-lang {
+    font-family: var(--mono); font-size: 0.65rem; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 0.08em;
+  }
+  .copy-btn {
+    font-family: var(--mono); font-size: 0.62rem; color: var(--muted);
+    background: none; border: 1px solid var(--border); border-radius: 6px;
+    padding: 3px 10px; cursor: pointer; transition: all 0.2s;
+  }
+  .copy-btn:hover { border-color: var(--green); color: var(--green); }
+  pre {
+    padding: 20px; overflow-x: auto; font-family: var(--mono);
+    font-size: 0.75rem; line-height: 1.85; color: var(--text);
+    white-space: pre;
+  }
+  .c-green  { color: #4ade80; }
+  .c-blue   { color: #60a5fa; }
+  .c-amber  { color: #fbbf24; }
+  .c-muted  { color: #6b8f72; }
+  .c-purple { color: #c084fc; }
+  .c-red    { color: #f87171; }
+
+  /* DIRECTORY TREE */
+  .tree {
+    background: #050a07; border: 1px solid var(--border);
+    border-radius: 12px; padding: 20px 24px;
+    font-family: var(--mono); font-size: 0.76rem; line-height: 2;
+  }
+  .tree-folder { color: var(--amber); }
+  .tree-file   { color: var(--blue); }
+  .tree-comment{ color: var(--muted); font-size: 0.68rem; }
+
+  /* STEPS */
+  .steps { display: flex; flex-direction: column; gap: 12px; }
+  .step-item {
+    display: flex; gap: 14px; padding: 14px 16px;
+    background: var(--bg2); border-radius: 12px; border: 1px solid var(--border);
+  }
+  .step-icon { font-size: 1.2rem; flex-shrink: 0; margin-top: 1px; }
+  .step-content h4 { font-size: 0.88rem; font-weight: 600; margin-bottom: 4px; }
+  .step-content p  { font-size: 0.8rem; color: var(--muted); line-height: 1.6; }
+
+  /* GRID */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+  /* BADGE */
+  .badge {
+    display: inline-block; padding: 2px 10px; border-radius: 20px;
+    font-size: 0.65rem; font-family: var(--mono); font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.06em;
+  }
+  .badge-green  { background: #14301e; color: var(--green); border: 1px solid #2a6040; }
+  .badge-amber  { background: #3b1f00; color: var(--amber); border: 1px solid #5a3a00; }
+  .badge-blue   { background: #1e3a5f; color: var(--blue);  border: 1px solid #2a5080; }
+  .badge-purple { background: #2d1f4a; color: var(--purple);border: 1px solid #4a3070; }
+  .badge-red    { background: #3b0000; color: var(--red);   border: 1px solid #600000; }
+
+  /* ALERT BOXES */
+  .alert {
+    padding: 14px 18px; border-radius: 12px; font-size: 0.82rem;
+    margin: 14px 0; display: flex; gap: 10px; align-items: flex-start;
+    line-height: 1.6;
+  }
+  .alert-icon { font-size: 1rem; flex-shrink: 0; }
+  .alert-warn   { background: #3b1f00; border: 1px solid #5a3a00; color: #fde68a; }
+  .alert-info   { background: #1e3a5f; border: 1px solid #2a5080; color: #bfdbfe; }
+  .alert-tip    { background: #14301e; border: 1px solid #2a6040; color: #bbf7d0; }
+
+  /* TABLE */
+  table { width: 100%; border-collapse: collapse; font-size: 0.8rem; margin: 12px 0; }
+  th {
+    font-family: var(--mono); font-size: 0.62rem; text-transform: uppercase;
+    letter-spacing: 0.08em; color: var(--muted); text-align: left;
+    padding: 8px 12px; border-bottom: 1px solid var(--border);
+  }
+  td { padding: 9px 12px; border-bottom: 1px solid #1f3025; }
+  tr:hover td { background: var(--bg2); }
+  td code {
+    font-family: var(--mono); font-size: 0.7rem;
+    background: var(--bg2); padding: 2px 6px; border-radius: 4px; color: var(--green);
+  }
+
+  /* INLINE CODE */
+  p code, li code {
+    font-family: var(--mono); font-size: 0.75rem;
+    background: var(--bg2); padding: 2px 7px; border-radius: 4px; color: var(--green);
+  }
+
+  p { margin-bottom: 10px; }
+  ul { padding-left: 20px; margin-bottom: 10px; }
+  li { margin-bottom: 6px; font-size: 0.85rem; color: var(--text); }
+  h3 { font-size: 1rem; margin: 20px 0 10px; font-weight: 600; }
+  h4 { font-size: 0.88rem; margin: 14px 0 8px; font-weight: 600; color: var(--muted); font-family: var(--mono); text-transform: uppercase; letter-spacing: 0.06em; }
+
+  /* WIRING TABLE */
+  .wiring { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .wire-pin {
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 10px; padding: 12px 14px; text-align: center;
+  }
+  .wire-pin .pin { font-family: var(--mono); font-size: 0.7rem; color: var(--muted); margin-bottom: 4px; }
+  .wire-pin .arrow { color: var(--green); font-size: 1.2rem; margin: 4px 0; }
+  .wire-pin .dest { font-family: var(--mono); font-size: 0.78rem; color: var(--amber); }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, #14301e 0%, #1a2820 50%, #0a1a10 100%);
+    border: 1px solid var(--border); border-radius: 20px;
+    padding: 36px; margin-bottom: 40px; position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: '🌱'; position: absolute; right: 30px; top: 50%;
+    transform: translateY(-50%); font-size: 5rem; opacity: 0.12;
+  }
+  .hero h2 { font-size: 1.6rem; font-weight: 700; margin-bottom: 8px; }
+  .hero p  { color: var(--muted); font-size: 0.88rem; max-width: 500px; }
+  .hero-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+
+  /* CHECKLIST */
+  .checklist { display: flex; flex-direction: column; gap: 8px; }
+  .check-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 14px; background: var(--bg2);
+    border-radius: 10px; font-size: 0.82rem;
+    border: 1px solid var(--border); cursor: pointer;
+    user-select: none; transition: border-color 0.2s;
+  }
+  .check-item:hover { border-color: var(--green); }
+  .check-box {
+    width: 18px; height: 18px; border-radius: 5px;
+    border: 2px solid var(--border); flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.7rem; transition: all 0.2s;
+  }
+  .check-item.checked .check-box { background: var(--green); border-color: var(--green); color: #0a0f0d; }
+  .check-item.checked span { text-decoration: line-through; color: var(--muted); }
+
+  @media (max-width: 768px) {
+    .sidebar { display: none; }
+    .main { margin-left: 0; padding: 24px 16px; }
+    .progress-bar { left: 0; }
+    .grid-2 { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>SoilSense 🌱</h1>
+    <p>Complete Setup Guide</p>
+  </div>
+  <div class="nav-section">
+    <span class="nav-label">Getting Started</span>
+    <a class="nav-link" onclick="scrollTo('s0')"><span class="step-num">0</span> Overview</a>
+    <a class="nav-link" onclick="scrollTo('s1')"><span class="step-num">1</span> Prerequisites</a>
+    <a class="nav-link" onclick="scrollTo('s2')"><span class="step-num">2</span> Project Structure</a>
+  </div>
+  <div class="nav-section">
+    <span class="nav-label">Firebase Setup</span>
+    <a class="nav-link" onclick="scrollTo('s3')"><span class="step-num">3</span> Create Firebase Project</a>
+    <a class="nav-link" onclick="scrollTo('s4')"><span class="step-num">4</span> Database Rules</a>
+    <a class="nav-link" onclick="scrollTo('s5')"><span class="step-num">5</span> Firebase Config</a>
+  </div>
+  <div class="nav-section">
+    <span class="nav-label">Hardware</span>
+    <a class="nav-link" onclick="scrollTo('s6')"><span class="step-num">6</span> Circuit Wiring</a>
+    <a class="nav-link" onclick="scrollTo('s7')"><span class="step-num">7</span> Arduino IDE Setup</a>
+    <a class="nav-link" onclick="scrollTo('s8')"><span class="step-num">8</span> NodeMCU Code</a>
+  </div>
+  <div class="nav-section">
+    <span class="nav-label">Dashboard</span>
+    <a class="nav-link" onclick="scrollTo('s9')"><span class="step-num">9</span> Dashboard Code</a>
+    <a class="nav-link" onclick="scrollTo('s10')"><span class="step-num">10</span> Testing & Deploy</a>
+    <a class="nav-link" onclick="scrollTo('s11')"><span class="step-num">11</span> Troubleshooting</a>
+  </div>
+</nav>
+
+<!-- PROGRESS -->
+<div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+
+<!-- MAIN CONTENT -->
+<main class="main">
+
+  <!-- HERO -->
+  <div class="hero" id="s0">
+    <h2>Smart IoT Soil Monitoring System</h2>
+    <p>Complete end-to-end setup — from wiring the NodeMCU to a live web dashboard connected to Firebase Realtime Database.</p>
+    <div class="hero-tags">
+      <span class="badge badge-green">NodeMCU ESP8266</span>
+      <span class="badge badge-amber">Firebase RTDB</span>
+      <span class="badge badge-blue">HTML Dashboard</span>
+      <span class="badge badge-purple">Chart.js</span>
+      <span class="badge badge-red">Soil Sensor</span>
+    </div>
+  </div>
+
+  <!-- ── SECTION 1 ── -->
+  <div class="section" id="s1">
+    <div class="section-header">
+      <div class="section-num">1</div>
+      <div>
+        <div class="section-title">Prerequisites</div>
+        <div class="section-sub">Everything you need before starting</div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">🔩 Hardware Required</div>
+        <table>
+          <tr><th>Component</th><th>Qty</th></tr>
+          <tr><td>NodeMCU ESP8266 (v1/v2/v3)</td><td>1</td></tr>
+          <tr><td>Capacitive Soil Moisture Sensor</td><td>1</td></tr>
+          <tr><td>Micro USB Cable</td><td>1</td></tr>
+          <tr><td>Jumper Wires (F-M)</td><td>3</td></tr>
+          <tr><td>Breadboard (optional)</td><td>1</td></tr>
+        </table>
+        <div class="alert alert-info" style="margin-top:10px">
+          <span class="alert-icon">ℹ️</span>
+          <span>Use a <strong>capacitive sensor</strong> (not resistive) — it lasts longer and is more accurate.</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">💻 Software Required</div>
+        <div class="checklist" id="softwareChecklist">
+          <div class="check-item" onclick="toggleCheck(this)">
+            <div class="check-box">✓</div><span>Arduino IDE 2.x (latest)</span>
+          </div>
+          <div class="check-item" onclick="toggleCheck(this)">
+            <div class="check-box">✓</div><span>Google account (Firebase)</span>
+          </div>
+          <div class="check-item" onclick="toggleCheck(this)">
+            <div class="check-box">✓</div><span>VS Code or any text editor</span>
+          </div>
+          <div class="check-item" onclick="toggleCheck(this)">
+            <div class="check-box">✓</div><span>Chrome / Firefox browser</span>
+          </div>
+          <div class="check-item" onclick="toggleCheck(this)">
+            <div class="check-box">✓</div><span>CP2102 / CH340 USB Driver</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SECTION 2 ── -->
+  <div class="section" id="s2">
+    <div class="section-header">
+      <div class="section-num">2</div>
+      <div>
+        <div class="section-title">Project Directory Structure</div>
+        <div class="section-sub">How to organise your files</div>
+      </div>
+    </div>
+
+    <div class="tree">
+<span class="c-amber">SoilSense-IoT/</span>
+├── <span class="c-amber">nodemcu/</span>
+│   └── <span class="c-blue">soil_monitor.ino</span>          <span class="c-muted">← Arduino firmware (upload to NodeMCU)</span>
+│
+├── <span class="c-amber">dashboard/</span>
+│   ├── <span class="c-blue">index.html</span>                <span class="c-muted">← Main dashboard (open in browser)</span>
+│   ├── <span class="c-blue">firebase-config.js</span>        <span class="c-muted">← Your Firebase credentials</span>
+│   ├── <span class="c-blue">app.js</span>                    <span class="c-muted">← Dashboard logic (charts, alerts)</span>
+│   └── <span class="c-blue">style.css</span>                 <span class="c-muted">← Dashboard styles</span>
+│
+├── <span class="c-amber">docs/</span>
+│   ├── <span class="c-blue">circuit-diagram.png</span>        <span class="c-muted">← Wiring reference image</span>
+│   └── <span class="c-blue">project-report.pdf</span>        <span class="c-muted">← For submission</span>
+│
+└── <span class="c-blue">README.md</span>                     <span class="c-muted">← Project overview &amp; setup instructions</span>
+    </div>
+
+    <div class="alert alert-tip">
+      <span class="alert-icon">💡</span>
+      <span>For viva / submission, you only need to open <code>dashboard/index.html</code> in a browser — no server required. Firebase SDK loads from CDN.</span>
+    </div>
+  </div>
+
+  <!-- ── SECTION 3 ── -->
+  <div class="section" id="s3">
+    <div class="section-header">
+      <div class="section-num">3</div>
+      <div>
+        <div class="section-title">Create Firebase Project</div>
+        <div class="section-sub">Step-by-step Firebase console setup</div>
+      </div>
+    </div>
+
+    <div class="steps">
+      <div class="step-item">
+        <span class="step-icon">1️⃣</span>
+        <div class="step-content">
+          <h4>Go to Firebase Console</h4>
+          <p>Open <strong>console.firebase.google.com</strong> → Sign in with Google → Click <strong>"Add Project"</strong></p>
+        </div>
+      </div>
+      <div class="step-item">
+        <span class="step-icon">2️⃣</span>
+        <div class="step-content">
+          <h4>Create Project</h4>
+          <p>Name it <code>soilsense-iot</code> → Disable Google Analytics (not needed) → Click <strong>Create Project</strong></p>
+        </div>
+      </div>
+      <div class="step-item">
+        <span class="step-icon">3️⃣</span>
+        <div class="step-content">
+          <h4>Enable Realtime Database</h4>
+          <p>Left sidebar → <strong>Build → Realtime Database</strong> → Click <strong>"Create Database"</strong> → Choose <strong>Test mode</strong> (for development) → Select nearest server location → Click <strong>Enable</strong></p>
+        </div>
+      </div>
+      <div class="step-item">
+        <span class="step-icon">4️⃣</span>
+        <div class="step-content">
+          <h4>Register a Web App</h4>
+          <p>Project Overview → Click the <strong>&lt;/&gt; Web</strong> icon → App nickname: <code>SoilSense Dashboard</code> → Click <strong>Register App</strong> → Copy the <code>firebaseConfig</code> object shown</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <span class="step-icon">5️⃣</span>
+        <div class="step-content">
+          <h4>Get Database Secret (for NodeMCU)</h4>
+          <p>Project Settings (gear icon) → <strong>Service Accounts</strong> → <strong>Database Secrets</strong> → Click <strong>"Show"</strong> → Copy the secret key</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SECTION 4 ── -->
+  <div class="section" id="s4">
+    <div class="section-header">
+      <div class="section-num">4</div>
+      <div>
+        <div class="section-title">Firebase Database Rules</div>
+        <div class="section-sub">Set read/write permissions</div>
+      </div>
+    </div>
+
+    <p>In Firebase Console → Realtime Database → <strong>Rules</strong> tab → paste this:</p>
+
+    <div class="alert alert-warn">
+      <span class="alert-icon">⚠️</span>
+      <span>These rules allow public read/write — fine for a college project demo. For production, add authentication rules.</span>
+    </div>
+
+    <div class="code-block">
+      <div class="code-header">
+        <span class="code-lang">json — firebase rules</span>
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </div>
+      <pre>{
+  <span class="c-green">"rules"</span>: {
+    <span class="c-green">"sensor"</span>: {
+      <span class="c-green">".read"</span>: <span class="c-amber">true</span>,
+      <span class="c-green">".write"</span>: <span class="c-amber">true</span>
+    }
+  }
+}</pre>
+    </div>
+
+    <p>Click <strong>Publish</strong> to save the rules.</p>
+
+    <h3>Expected Database Structure</h3>
+    <p>This is how data will look in Firebase after NodeMCU starts sending:</p>
+
+    <div class="code-block">
+      <div class="code-header">
+        <span class="code-lang">json — realtime database structure</span>
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </div>
+      <pre>{
+  <span class="c-green">"sensor"</span>: {
+    <span class="c-green">"moisture"</span>: {
+      <span class="c-green">"1705123456"</span>: {            <span class="c-muted">← Unix timestamp as key</span>
+        <span class="c-green">"value"</span>: <span class="c-amber">72.4</span>,            <span class="c-muted">← Moisture % (0–100)</span>
+        <span class="c-green">"raw"</span>: <span class="c-amber">285</span>,              <span class="c-muted">← Raw ADC value (0–1023)</span>
+        <span class="c-green">"timestamp"</span>: <span class="c-blue">"2024-01-13T10:30:56"</span>
+      },
+      <span class="c-green">"1705123461"</span>: {
+        <span class="c-green">"value"</span>: <span class="c-amber">71.8</span>,
+        <span class="c-green">"raw"</span>: <span class="c-amber">289</span>,
+        <span class="c-green">"timestamp"</span>: <span class="c-blue">"2024-01-13T10:31:01"</span>
+      }
+    }
+  }
+}</pre>
+    </div>
+  </div>
+
+  <!-- ── SECTION 5 ── -->
+  <div class="section" id="s5">
+    <div class="section-header">
+      <div class="section-num">5</div>
+      <div>
+        <div class="section-title">Firebase Config File</div>
+        <div class="section-sub">dashboard/firebase-config.js</div>
+      </div>
+    </div>
+
+    <p>Create this file with <em>your actual values</em> from the Firebase Console:</p>
+
+    <div class="code-block">
+      <div class="code-header">
+        <span class="code-lang">javascript — dashboard/firebase-config.js</span>
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </div>
+      <pre><span class="c-muted">// dashboard/firebase-config.js
+// Replace ALL values below with your Firebase project's config
+// Get these from: Firebase Console → Project Settings → Your Apps → SDK setup</span>
+
+<span class="c-purple">const</span> <span class="c-blue">firebaseConfig</span> = {
+  apiKey:            <span class="c-amber">"AIzaSyXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"</span>,
+  authDomain:        <span class="c-amber">"soilsense-iot.firebaseapp.com"</span>,
+  databaseURL:       <span class="c-amber">"https://soilsense-iot-default-rtdb.firebaseio.com"</span>,
+  projectId:         <span class="c-amber">"soilsense-iot"</span>,
+  storageBucket:     <span class="c-amber">"soilsense-iot.appspot.com"</span>,
+  messagingSenderId: <span class="c-amber">"123456789012"</span>,
+  appId:             <span class="c-amber">"1:123456789012:web:abcdefabcdefabcdef"</span>
+};
+
+<span class="c-muted">// Path in Realtime Database where NodeMCU writes data</span>
+<span class="c-purple">const</span> <span class="c-blue">DB_PATH</span> = <span class="c-amber">"sensor/moisture"</span>;</pre>
+    </div>
+  </div>
+
+  <!-- ── SECTION 6 ── -->
+  <div class="section" id="s6">
+    <div class="section-header">
+      <div class="section-num">6</div>
+      <div>
+        <div class="section-title">Circuit Wiring</div>
+        <div class="section-sub">Connect Soil Sensor → NodeMCU ESP8266</div>
+      </div>
+    </div>
+
+    <div class="wiring">
+      <div class="wire-pin">
+        <div class="pin">Sensor VCC</div>
+        <div class="arrow">↓</div>
+        <div class="dest">3.3V (NodeMCU)</div>
+      </div>
+      <div class="wire-pin">
+        <div class="pin">Sensor GND</div>
+        <div class="arrow">↓</div>
+        <div class="dest">GND (NodeMCU)</div>
+      </div>
+      <div class="wire-pin">
+        <div class="pin">Sensor AOUT</div>
+        <div class="arrow">↓</div>
+        <div class="dest">A0 (NodeMCU)</div>
+      </div>
+    </div>
+
+    <div class="alert alert-warn" style="margin-top:16px">
+      <span class="alert-icon">⚠️</span>
+      <span>NodeMCU's A0 pin only accepts <strong>0–1V</strong>. Most sensors output 0–3.3V — if your sensor outputs 3.3V, use a <strong>voltage divider</strong> (10kΩ + 33kΩ resistors) between AOUT and A0.</span>
+    </div>
+
+    <div class="card" style="margin-top:16px">
+      <div class="card-title">📐 Voltage Divider (if needed)</div>
+      <div class="code-block" style="margin:0">
+        <pre>Sensor AOUT ──── 10kΩ ──── A0 (NodeMCU)
+                    │
+                   33kΩ
+                    │
+                   GND
+
+<span class="c-muted">Output = 3.3V × (33kΩ / (10kΩ + 33kΩ)) = 3.3V × 0.77 = ~2.5V
+→ Actually still above 1V limit! Use 33kΩ + 100kΩ for ~2.5V sensor.</span>
+
+<span class="c-muted">Safest option: Use sensors specifically rated for NodeMCU (3.3V with A0-safe output).</span></pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SECTION 7 ── -->
+  <div class="section" id="s7">
+    <div class="section-header">
+      <div class="section-num">7</div>
+      <div>
+        <div class="section-title">Arduino IDE Setup</div>
+        <div class="section-sub">Install board support and libraries</div>
+      </div>
+    </div>
+
+    <div class="steps">
+      <div class="step-item">
+        <span class="step-icon">📦</span>
+        <div class="step-content">
+          <h4>Add ESP8266 Board URL</h4>
+          <p>Arduino IDE → File → Preferences → Additional Boards Manager URLs:</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">url</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+      <pre>https://arduino.esp8266.com/stable/package_esp8266com_index.json</pre>
+    </div>
+
+    <div class="steps" style="margin-top:12px">
+      <div class="step-item">
+        <span class="step-icon">🔧</span>
+        <div class="step-content">
+          <h4>Install ESP8266 Board</h4>
+          <p>Tools → Board → Boards Manager → Search <code>esp8266</code> → Install <strong>"esp8266 by ESP8266 Community"</strong></p>
+        </div>
+      </div>
+      <div class="step-item">
+        <span class="step-icon">📚</span>
+        <div class="step-content">
+          <h4>Install Required Libraries</h4>
+          <p>Tools → Manage Libraries → Search and install each:</p>
+        </div>
+      </div>
+    </div>
+
+    <table>
+      <tr><th>Library</th><th>Author</th><th>Purpose</th></tr>
+      <tr><td><code>Firebase ESP8266 Client</code></td><td>Mobizt</td><td>Send data to Firebase RTDB</td></tr>
+      <tr><td><code>NTPClient</code></td><td>Fabrice Weinberg</td><td>Get current date/time from internet</td></tr>
+      <tr><td><code>ArduinoJson</code></td><td>Benoit Blanchon</td><td>JSON data formatting</td></tr>
+    </table>
+
+    <div class="steps" style="margin-top:12px">
+      <div class="step-item">
+        <span class="step-icon">⚙️</span>
+        <div class="step-content">
+          <h4>Board Settings (Tools Menu)</h4>
+          <p>Board: <code>NodeMCU 1.0 (ESP-12E Module)</code> · Upload Speed: <code>115200</code> · Flash Size: <code>4MB (FS:2MB OTA:~1019KB)</code> · Port: <code>COM3</code> or <code>/dev/ttyUSB0</code></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SECTION 8 ── -->
+  <div class="section" id="s8">
+    <div class="section-header">
+      <div class="section-num">8</div>
+      <div>
+        <div class="section-title">NodeMCU Firmware Code</div>
+        <div class="section-sub">nodemcu/soil_monitor.ino — complete code</div>
+      </div>
+    </div>
+
+    <div class="code-block">
+      <div class="code-header">
+        <span class="code-lang">c++ — nodemcu/soil_monitor.ino</span>
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </div>
+      <pre><span class="c-muted">/*
+ * SoilSense IoT — NodeMCU ESP8266 Firmware
+ * Reads soil moisture sensor → sends to Firebase Realtime Database
+ * with timestamp every 5 seconds.
+ *
+ * Libraries: FirebaseESP8266, NTPClient, ArduinoJson
+ */</span>
+
+<span class="c-blue">#include</span> <span class="c-green">&lt;ESP8266WiFi.h&gt;</span>
+<span class="c-blue">#include</span> <span class="c-green">&lt;FirebaseESP8266.h&gt;</span>
+<span class="c-blue">#include</span> <span class="c-green">&lt;NTPClient.h&gt;</span>
+<span class="c-blue">#include</span> <span class="c-green">&lt;WiFiUdp.h&gt;</span>
+<span class="c-blue">#include</span> <span class="c-green">&lt;ArduinoJson.h&gt;</span>
+
+<span class="c-muted">// ── CONFIGURATION — Edit these values ──────────────────────────────</span>
+<span class="c-blue">#define</span> WIFI_SSID      <span class="c-amber">"YOUR_WIFI_SSID"</span>
+<span class="c-blue">#define</span> WIFI_PASSWORD  <span class="c-amber">"YOUR_WIFI_PASSWORD"</span>
+
+<span class="c-blue">#define</span> FIREBASE_HOST  <span class="c-amber">"soilsense-iot-default-rtdb.firebaseio.com"</span>  <span class="c-muted">// without https://</span>
+<span class="c-blue">#define</span> FIREBASE_AUTH  <span class="c-amber">"YOUR_DATABASE_SECRET_KEY"</span>                     <span class="c-muted">// from Project Settings</span>
+
+<span class="c-blue">#define</span> SENSOR_PIN     A0        <span class="c-muted">// Analog pin (only A0 on NodeMCU)</span>
+<span class="c-blue">#define</span> SEND_INTERVAL  5000      <span class="c-muted">// ms between readings (5 seconds)</span>
+<span class="c-blue">#define</span> IST_OFFSET     19800    <span class="c-muted">// UTC+5:30 for India (seconds)</span>
+<span class="c-muted">// ──────────────────────────────────────────────────────────────────</span>
+
+FirebaseData   fbData;
+FirebaseConfig fbConfig;
+FirebaseAuth   fbAuth;
+
+WiFiUDP   ntpUDP;
+NTPClient timeClient(ntpUDP, <span class="c-amber">"pool.ntp.org"</span>, IST_OFFSET, 60000);
+
+<span class="c-purple">unsigned long</span> lastSendTime = <span class="c-amber">0</span>;
+<span class="c-purple">int</span>           readingCount = <span class="c-amber">0</span>;
+
+<span class="c-green">void</span> <span class="c-blue">connectWiFi</span>() {
+  Serial.print(<span class="c-amber">"Connecting to WiFi"</span>);
+  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+  <span class="c-purple">while</span> (WiFi.status() != WL_CONNECTED) {
+    delay(<span class="c-amber">500</span>); Serial.print(<span class="c-amber">"."</span>);
+  }
+  Serial.println(<span class="c-amber">"\n✅ WiFi Connected!"</span>);
+  Serial.print(<span class="c-amber">"IP Address: "</span>);
+  Serial.println(WiFi.localIP());
+}
+
+<span class="c-green">String</span> <span class="c-blue">getISOTimestamp</span>() {
+  timeClient.update();
+  time_t epochTime = timeClient.getEpochTime();
+  <span class="c-purple">struct</span> tm *ptm = gmtime(&amp;epochTime);
+
+  <span class="c-purple">char</span> buf[25];
+  snprintf(buf, <span class="c-purple">sizeof</span>(buf),
+    <span class="c-amber">"%04d-%02d-%02dT%02d:%02d:%02d"</span>,
+    ptm-&gt;tm_year + <span class="c-amber">1900</span>,
+    ptm-&gt;tm_mon  + <span class="c-amber">1</span>,
+    ptm-&gt;tm_mday,
+    ptm-&gt;tm_hour,
+    ptm-&gt;tm_min,
+    ptm-&gt;tm_sec
+  );
+  <span class="c-purple">return</span> String(buf);
+}
+
+<span class="c-green">float</span> <span class="c-blue">readMoisture</span>() {
+  <span class="c-muted">// Average 5 readings to reduce noise</span>
+  <span class="c-purple">int</span> total = <span class="c-amber">0</span>;
+  <span class="c-purple">for</span> (<span class="c-purple">int</span> i = <span class="c-amber">0</span>; i &lt; <span class="c-amber">5</span>; i++) {
+    total += analogRead(SENSOR_PIN);
+    delay(<span class="c-amber">10</span>);
+  }
+  <span class="c-purple">int</span> raw = total / <span class="c-amber">5</span>;
+
+  <span class="c-muted">// Map: dry soil = ~800 ADC = 0%, wet soil = ~300 ADC = 100%
+  // Adjust these calibration values for YOUR sensor!</span>
+  <span class="c-purple">const int</span> DRY_VAL = <span class="c-amber">800</span>;
+  <span class="c-purple">const int</span> WET_VAL = <span class="c-amber">300</span>;
+  <span class="c-purple">float</span> moisture = map(raw, DRY_VAL, WET_VAL, <span class="c-amber">0</span>, <span class="c-amber">100</span>);
+  <span class="c-purple">return</span> constrain(moisture, <span class="c-amber">0.0</span>, <span class="c-amber">100.0</span>);
+}
+
+<span class="c-green">void</span> <span class="c-blue">setup</span>() {
+  Serial.begin(<span class="c-amber">115200</span>);
+  Serial.println(<span class="c-amber">"\n\n🌱 SoilSense IoT Starting..."</span>);
+
+  connectWiFi();
+
+  <span class="c-muted">// Firebase config</span>
+  fbConfig.host = FIREBASE_HOST;
+  fbConfig.signer.tokens.legacy_token = FIREBASE_AUTH;
+  Firebase.begin(&amp;fbConfig, &amp;fbAuth);
+  Firebase.reconnectWiFi(<span class="c-amber">true</span>);
+  fbData.setResponseSize(<span class="c-amber">4096</span>);
+
+  <span class="c-muted">// NTP time</span>
+  timeClient.begin();
+  timeClient.update();
+  Serial.println(<span class="c-amber">"✅ Firebase + NTP Ready!"</span>);
+}
+
+<span class="c-green">void</span> <span class="c-blue">loop</span>() {
+  <span class="c-purple">if</span> (millis() - lastSendTime &gt;= SEND_INTERVAL) {
+    lastSendTime = millis();
+
+    <span class="c-purple">float</span>  moisture  = readMoisture();
+    <span class="c-purple">int</span>    raw       = analogRead(SENSOR_PIN);
+    String timestamp = getISOTimestamp();
+    <span class="c-purple">long</span>   epoch     = timeClient.getEpochTime();
+
+    <span class="c-muted">// Path: /sensor/moisture/{epochTimestamp}</span>
+    String path = <span class="c-amber">"/sensor/moisture/"</span> + String(epoch);
+
+    <span class="c-muted">// Write as JSON object using FirebaseJson</span>
+    FirebaseJson jsonData;
+    jsonData.set(<span class="c-amber">"value"</span>,     moisture);
+    jsonData.set(<span class="c-amber">"raw"</span>,       raw);
+    jsonData.set(<span class="c-amber">"timestamp"</span>, timestamp);
+
+    <span class="c-purple">if</span> (Firebase.setJSON(fbData, path, jsonData)) {
+      readingCount++;
+      Serial.printf(<span class="c-amber">"✅ [%d] Sent → %.1f%% (raw:%d) @ %s\n"</span>,
+        readingCount, moisture, raw, timestamp.c_str());
+    } <span class="c-purple">else</span> {
+      Serial.print(<span class="c-amber">"❌ Firebase error: "</span>);
+      Serial.println(fbData.errorReason());
+    }
+  }
+}</pre>
+    </div>
+
+    <div class="alert alert-tip">
+      <span class="alert-icon">🎯</span>
+      <span><strong>Calibration tip:</strong> To find your sensor's DRY_VAL and WET_VAL, open Serial Monitor and note the raw ADC reading when the sensor is in dry air and when fully submerged in water. Replace those constants in the code.</span>
+    </div>
+  </div>
+
+  <!-- ── SECTION 9 ── -->
+  <div class="section" id="s9">
+    <div class="section-header">
+      <div class="section-num">9</div>
+      <div>
+        <div class="section-title">Dashboard Files</div>
+        <div class="section-sub">dashboard/index.html + app.js</div>
+      </div>
+    </div>
+
+    <h3>dashboard/index.html — head section</h3>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">html — dashboard/index.html (head)</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+      <pre><span class="c-muted">&lt;!-- Load Firebase SDK --&gt;</span>
+<span class="c-blue">&lt;script</span> src=<span class="c-green">"https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"</span><span class="c-blue">&gt;&lt;/script&gt;</span>
+<span class="c-blue">&lt;script</span> src=<span class="c-green">"https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"</span><span class="c-blue">&gt;&lt;/script&gt;</span>
+
+<span class="c-muted">&lt;!-- Chart.js for graphs --&gt;</span>
+<span class="c-blue">&lt;script</span> src=<span class="c-green">"https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"</span><span class="c-blue">&gt;&lt;/script&gt;</span>
+
+<span class="c-muted">&lt;!-- Your Firebase config (always load BEFORE app.js) --&gt;</span>
+<span class="c-blue">&lt;script</span> src=<span class="c-green">"firebase-config.js"</span><span class="c-blue">&gt;&lt;/script&gt;</span>
+
+<span class="c-muted">&lt;!-- Dashboard app --&gt;</span>
+<span class="c-blue">&lt;script</span> src=<span class="c-green">"app.js"</span> defer<span class="c-blue">&gt;&lt;/script&gt;</span></pre>
+    </div>
+
+    <h3>dashboard/app.js — Firebase connection</h3>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">javascript — dashboard/app.js</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+      <pre><span class="c-muted">// dashboard/app.js
+// Connects to Firebase and drives the dashboard UI</span>
+
+<span class="c-muted">// ── Init Firebase ──────────────────────────────────────────────────</span>
+<span class="c-purple">const</span> app = firebase.initializeApp(firebaseConfig);  <span class="c-muted">// from firebase-config.js</span>
+<span class="c-purple">const</span> db  = firebase.database();
+
+<span class="c-muted">// ── Real-Time Listener ─────────────────────────────────────────────</span>
+<span class="c-muted">// Fires every time a NEW reading is added by NodeMCU</span>
+db.ref(DB_PATH).limitToLast(<span class="c-amber">1</span>).on(<span class="c-green">'child_added'</span>, (snapshot) => {
+  <span class="c-purple">const</span> data = snapshot.val();
+  <span class="c-purple">if</span> (data &amp;&amp; data.value !== undefined) {
+    updateDashboard(data.value, data.raw, data.timestamp);
+  }
+});
+
+<span class="c-muted">// ── Load Last 20 Readings on Page Load ────────────────────────────</span>
+db.ref(DB_PATH).limitToLast(<span class="c-amber">20</span>).once(<span class="c-green">'value'</span>, (snapshot) => {
+  <span class="c-purple">const</span> entries = [];
+  snapshot.forEach(child => entries.push(child.val()));
+
+  <span class="c-muted">// Oldest → newest order for chart</span>
+  entries.reverse().forEach(d => {
+    <span class="c-purple">if</span> (d &amp;&amp; d.value !== undefined)
+      pushToChart(d.value, d.timestamp);
+  });
+  realtimeChart.update();
+  console.log(<span class="c-green">`✅ Loaded ${entries.length} historical readings`</span>);
+});
+
+<span class="c-muted">// ── updateDashboard(value, raw, timestamp) ─────────────────────────</span>
+<span class="c-green">function</span> <span class="c-blue">updateDashboard</span>(value, raw, timestamp) {
+  <span class="c-purple">const</span> ts      = timestamp ? <span class="c-purple">new</span> Date(timestamp) : <span class="c-purple">new</span> Date();
+  <span class="c-purple">const</span> timeStr = ts.toLocaleTimeString(<span class="c-amber">'en-IN'</span>, { hour12: <span class="c-amber">false</span> });
+  <span class="c-purple">const</span> pct     = parseFloat(value).toFixed(<span class="c-amber">1</span>);
+
+  <span class="c-muted">// Update DOM elements</span>
+  document.getElementById(<span class="c-amber">'moistureValue'</span>).textContent = pct;
+  document.getElementById(<span class="c-amber">'rawValue'</span>).textContent      = raw || <span class="c-amber">'--'</span>;
+  document.getElementById(<span class="c-amber">'lastTime'</span>).textContent       = timeStr;
+
+  <span class="c-muted">// Status badge</span>
+  <span class="c-purple">const</span> status = getStatus(value);
+  document.getElementById(<span class="c-amber">'statusBadge'</span>).textContent   = status.label;
+  document.getElementById(<span class="c-amber">'statusBadge'</span>).className    = <span class="c-green">`badge badge-${status.cls}`</span>;
+
+  <span class="c-muted">// Push to real-time chart</span>
+  pushToChart(value, timestamp);
+  realtimeChart.update();
+
+  <span class="c-muted">// Alert if dry</span>
+  <span class="c-purple">if</span> (value &lt; <span class="c-amber">30</span>) triggerAlert(value);
+}
+
+<span class="c-green">function</span> <span class="c-blue">getStatus</span>(v) {
+  <span class="c-purple">if</span> (v &lt; <span class="c-amber">20</span>) <span class="c-purple">return</span> { label: <span class="c-amber">'🔴 Critical Dry'</span>,   cls: <span class="c-amber">'critical'</span> };
+  <span class="c-purple">if</span> (v &lt; <span class="c-amber">40</span>) <span class="c-purple">return</span> { label: <span class="c-amber">'🟡 Dry'</span>,           cls: <span class="c-amber">'dry'</span>      };
+  <span class="c-purple">if</span> (v &lt; <span class="c-amber">70</span>) <span class="c-purple">return</span> { label: <span class="c-amber">'🟢 Optimal'</span>,      cls: <span class="c-amber">'ok'</span>       };
+  <span class="c-purple">return</span>           { label: <span class="c-amber">'🔵 Wet'</span>,           cls: <span class="c-amber">'wet'</span>      };
+}</pre>
+    </div>
+  </div>
+
+  <!-- ── SECTION 10 ── -->
+  <div class="section" id="s10">
+    <div class="section-header">
+      <div class="section-num">10</div>
+      <div>
+        <div class="section-title">Testing & Running</div>
+        <div class="section-sub">How to verify everything works</div>
+      </div>
+    </div>
+
+    <div class="steps">
+      <div class="step-item">
+        <span class="step-icon">🔌</span>
+        <div class="step-content">
+          <h4>Step 1 — Upload Firmware</h4>
+          <p>Open <code>soil_monitor.ino</code> in Arduino IDE → Fill in WiFi + Firebase credentials → Connect NodeMCU via USB → Select correct COM port → Click <strong>Upload (→)</strong></p>
+        </div>
+      </div>
+      <div class="step-item">
+        <span class="step-icon">📟</span>
+        <div class="step-content">
+          <h4>Step 2 — Check Serial Monitor</h4>
+          <p>Tools → Serial Monitor → Set baud rate to <code>115200</code>. You should see:<br/>
+          <code>✅ WiFi Connected!</code> then <code>✅ [1] Sent → 72.4% (raw:285) @ 2024-01-13T10:30:56</code></p>
+        </div>
+      </div>
+      <div class="step-item">
+        <span class="step-icon">🔥</span>
+        <div class="step-content">
+          <h4>Step 3 — Verify Firebase</h4>
+          <p>Firebase Console → Realtime Database → Data tab. You should see <code>/sensor/moisture/{timestamp}</code> nodes appearing every 5 seconds.</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <span class="step-icon">🌐</span>
+        <div class="step-content">
+          <h4>Step 4 — Open Dashboard</h4>
+          <p>Double-click <code>dashboard/index.html</code> to open in browser (or use Live Server in VS Code). The gauge and chart should update in real time!</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="alert alert-info" style="margin-top:16px">
+      <span class="alert-icon">🚀</span>
+      <span>To deploy the dashboard online for free: upload <code>dashboard/</code> folder to <strong>GitHub Pages</strong> or <strong>Firebase Hosting</strong> (<code>firebase deploy</code>). Your dashboard becomes accessible from anywhere!</span>
+    </div>
+  </div>
+
+  <!-- ── SECTION 11 ── -->
+  <div class="section" id="s11">
+    <div class="section-header">
+      <div class="section-num">11</div>
+      <div>
+        <div class="section-title">Troubleshooting</div>
+        <div class="section-sub">Common issues and fixes</div>
+      </div>
+    </div>
+
+    <table>
+      <tr><th>Problem</th><th>Cause</th><th>Fix</th></tr>
+      <tr>
+        <td>Serial monitor garbage characters</td>
+        <td>Wrong baud rate</td>
+        <td>Set to <code>115200</code></td>
+      </tr>
+      <tr>
+        <td>NodeMCU not detected (COM port missing)</td>
+        <td>Missing USB driver</td>
+        <td>Install CP2102 or CH340 driver for your OS</td>
+      </tr>
+      <tr>
+        <td><code>❌ Firebase error: connection refused</code></td>
+        <td>Wrong FIREBASE_HOST</td>
+        <td>Remove <code>https://</code> prefix from host</td>
+      </tr>
+      <tr>
+        <td>Sensor always reads 0% or 100%</td>
+        <td>Wrong calibration values</td>
+        <td>Read raw ADC in dry air and in water, set DRY_VAL and WET_VAL</td>
+      </tr>
+      <tr>
+        <td>Dashboard shows no data</td>
+        <td>CORS or wrong DB path</td>
+        <td>Open browser DevTools → Console for error; check DB_PATH matches Firebase</td>
+      </tr>
+      <tr>
+        <td>NodeMCU keeps restarting (crash loop)</td>
+        <td>Insufficient power</td>
+        <td>Use a good USB cable + 5V 1A adapter, not laptop USB</td>
+      </tr>
+      <tr>
+        <td>Firebase permission denied</td>
+        <td>Database rules too strict</td>
+        <td>Set rules to <code>true</code> for both read and write in test mode</td>
+      </tr>
+    </table>
+  </div>
+
+</main>
+
+<script>
+// Scroll to section
+function scrollTo(id) {
+  document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// Progress bar
+window.addEventListener('scroll', () => {
+  const el = document.documentElement;
+  const pct = (el.scrollTop / (el.scrollHeight - el.clientHeight)) * 100;
+  document.getElementById('progressFill').style.width = pct + '%';
+});
+
+// Checklist toggle
+function toggleCheck(el) {
+  el.classList.toggle('checked');
+}
+
+// Copy code
+function copyCode(btn) {
+  const code = btn.closest('.code-block').querySelector('pre');
+  navigator.clipboard.writeText(code.innerText).then(() => {
+    btn.textContent = 'Copied!';
+    btn.style.color = '#4ade80';
+    setTimeout(() => { btn.textContent = 'Copy'; btn.style.color = ''; }, 2000);
+  });
+}
+</script>
+</body>
+</html>
