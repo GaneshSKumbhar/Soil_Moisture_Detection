@@ -1,9 +1,13 @@
-# TODO: Enhance README.md with extra info and screenshots
+# Favicon Addition Plan
 
-**Completed:** Previous README update from DOCX.
+**Objective**: Add favicon matching dashboard top-left logo style (green 🌱 icon).
 
-**Remaining Steps:**
-- [x] Step 1: Add extra project information (full firebaseConfig, EmailJS, wiring notes)
-- [x] Step 2: Add Screenshots section (3 placeholders with instructions)
-- [x] Step 3: Update README.md with new content  
-- [x] Step 4: Mark complete and finalize
+**Steps**:
+- [x] Step 1: Create `images/favicon.svg` (32x32 SVG mimicking green circle + plant)
+- [x] Step 2: Add favicon link to `soil-monitor-dashboard.html`
+**Completed ✅**
+
+Favicon links added to both HTML files matching dashboard green 🌱 logo style.
+SVG favicon ready at images/favicon.svg.
+README update optional. Task complete.
+
