@@ -4,14 +4,21 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>SoilSense Pro</title>
-<!-- FIX 1: Favicon added -->
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%234ade80' stroke='%2322c55e' stroke-width='1.5'/%3E%3Ctext x='16' y='22' font-family='Arial,sans-serif' font-size='18' fill='%23166334' text-anchor='middle' dominant-baseline='middle'%3E%F0%9F%8C%B1%3C/text%3E%3C/svg%3E" type="image/svg+xml">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%234ade80' stroke='%2322c55e' stroke-width='1.5'/%3E%3Ctext x='16' y='22' font-family='Arial,sans-serif' font-size='18' fill='%23166334' text-anchor='middle' dominant-baseline='middle'%3E🌱%3C/text%3E%3C/svg%3E" type="image/svg+xml">
+
+<!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+
+<!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+<!-- EmailJS -->
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+
 <style>
 [data-theme="dark"]{
   --bg:#0a0f0d;--bg2:#111a14;--card:#1a2820;--border:#2a3f30;
@@ -31,6 +38,8 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
 @keyframes slideUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.4}}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+
+/* LOGIN */
 .login-page{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:1000;animation:fadeIn .4s ease}
 .login-box{background:var(--card);border:1px solid var(--border);border-radius:24px;padding:40px;width:min(420px,92vw);box-shadow:0 20px 60px var(--shadow)}
 .ll{display:flex;align-items:center;gap:12px;margin-bottom:28px}
@@ -50,6 +59,8 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
 .ltog{text-align:center;font-size:.78rem;color:var(--muted);margin-top:14px;cursor:pointer}
 .ltog span{color:var(--green);text-decoration:underline}
 .ldiv{text-align:center;font-size:.7rem;color:var(--muted);margin:12px 0;font-family:'Space Mono',monospace}
+
+/* HEADER */
 .header{display:flex;align-items:center;justify-content:space-between;padding:14px 26px;border-bottom:1px solid var(--border);background:var(--bg);flex-wrap:wrap;gap:8px}
 .logo{display:flex;align-items:center;gap:10px}
 .logo-icon{width:34px;height:34px;background:var(--green-glow);border:1px solid var(--green);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:1rem}
@@ -64,18 +75,20 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
 .hb{padding:5px 11px;border-radius:20px;border:1px solid var(--border);background:var(--bg2);color:var(--muted);font-size:.68rem;cursor:pointer;font-family:'Space Mono',monospace;transition:all .2s;white-space:nowrap}
 .hb:hover{border-color:var(--green);color:var(--green)}
 .uc{display:flex;align-items:center;gap:5px;padding:4px 11px;border-radius:20px;border:1px solid var(--border);background:var(--bg2);font-size:.62rem;font-family:'Space Mono',monospace;color:var(--muted)}
-.esp-chip{display:flex;align-items:center;gap:5px;padding:4px 11px;border-radius:20px;font-size:.62rem;font-family:'Space Mono',monospace;border:1px solid var(--border);background:var(--bg2);color:var(--muted)}
-.esp-chip.online{border-color:var(--green);color:var(--green);background:var(--green-dim)}
-.esp-chip.offline{border-color:var(--red);color:var(--red);background:#3b000033}
-.esp-chip.waiting{border-color:var(--amber);color:var(--amber);background:#3b1f0033}
+
+/* MAIN */
 .main{padding:18px 26px;max-width:1400px;margin:0 auto}
 .banner{padding:10px 15px;border-radius:11px;margin-bottom:14px;display:flex;align-items:center;gap:9px;font-size:.78rem;border:1px solid var(--border);background:var(--bg2)}
 .bdot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
 .dry-banner{display:none;padding:12px 18px;border-radius:12px;margin-bottom:14px;background:#3b0000;border:1px solid #600000;color:var(--red);font-size:.82rem;font-weight:600;animation:blink 1s infinite;align-items:center;gap:10px}
+
+/* SENSOR ROW */
 .sr{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px}
 .sc{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:20px;animation:slideUp .5s ease both;position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:center}
 .sc::after{content:'';position:absolute;bottom:-40px;right:-40px;width:130px;height:130px;border-radius:50%;filter:blur(28px);pointer-events:none}
-.sc1::after{background:var(--green-glow)}.sc2::after{background:#fb923c18}.sc3::after{background:#60a5fa18}
+.sc1::after{background:var(--green-glow)}
+.sc2::after{background:#fb923c18}
+.sc3::after{background:#60a5fa18}
 .scl{font-family:'Space Mono',monospace;font-size:.58rem;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-bottom:12px;align-self:flex-start}
 .sci{font-size:1.5rem;margin-bottom:7px}
 .scv{font-family:'Space Mono',monospace;font-size:1.9rem;font-weight:700;line-height:1;transition:color .5s}
@@ -85,11 +98,15 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
 .mi{background:var(--bg2);border-radius:8px;padding:8px 9px}
 .mi label{font-size:.55rem;font-family:'Space Mono',monospace;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;display:block;margin-bottom:2px}
 .mi span{font-family:'Space Mono',monospace;font-size:.7rem;color:var(--text)}
+
+/* Gauge */
 .gw{position:relative;width:148px;height:148px;margin-bottom:8px}
 #gc{width:148px;height:148px}
 .gcc{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding-top:6px}
 .gv{font-family:'Space Mono',monospace;font-size:1.85rem;font-weight:700;line-height:1;transition:color .6s}
 .gu{font-family:'Space Mono',monospace;font-size:.6rem;color:var(--muted);margin-top:2px}
+
+/* Status */
 .s-wet{background:#1e3a5f;color:var(--blue);border:1px solid #2a5080}
 .s-ok{background:#14301e;color:var(--green);border:1px solid #2a6040}
 .s-dry{background:#3b1f00;color:var(--amber);border:1px solid #5a3a00}
@@ -98,7 +115,8 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
 .s-normal{background:#14301e;color:var(--green);border:1px solid #2a6040}
 .s-warm{background:#3b1f00;color:var(--amber);border:1px solid #5a3a00}
 .s-hot{background:#3b0000;color:var(--red);border:1px solid #600000}
-.s-nodata{background:#1a1a2e;color:var(--muted);border:1px solid #2a2a4a}
+
+/* AI CARD */
 .ai-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:18px;margin-bottom:14px;position:relative;overflow:hidden}
 .ai-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--purple),var(--blue),var(--green))}
 .ai-h{display:flex;align-items:center;gap:8px;margin-bottom:12px}
@@ -111,16 +129,22 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
 .ai-bw{flex:1;height:5px;background:var(--bg2);border-radius:3px;overflow:hidden}
 .ai-b{height:100%;background:var(--purple);border-radius:3px;transition:width .8s ease}
 .ai-cl{font-size:.62rem;font-family:'Space Mono',monospace;color:var(--muted)}
+
+/* STATS */
 .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px}
 .stc{background:var(--card);border:1px solid var(--border);border-radius:13px;padding:13px 14px}
 .stl{font-size:.58rem;font-family:'Space Mono',monospace;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:4px}
 .stv{font-family:'Space Mono',monospace;font-size:1.3rem;font-weight:700}
 .sts{font-size:.6rem;color:var(--muted);margin-top:2px}
+
+/* CHARTS */
 .cr{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
 .cc{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:18px;display:flex;flex-direction:column}
 .ch{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
 .ct{font-family:'Space Mono',monospace;font-size:.6rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}
 .cw{flex:1;min-height:155px;position:relative}
+
+/* BOTTOM */
 .br{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
 .pc{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:18px;display:flex;flex-direction:column;max-height:245px;overflow:hidden}
 .sw{overflow-y:auto;flex:1;margin-top:10px}
@@ -135,9 +159,13 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
 .ht td{padding:5px 7px;border-bottom:1px solid var(--border);font-family:'Space Mono',monospace;font-size:.66rem}
 .ht tbody tr:hover{background:var(--bg2)}
 .badge{display:inline-block;padding:1px 5px;border-radius:20px;font-size:.54rem;font-weight:700}
-.bok{background:#14301e;color:var(--green)}.bwet{background:#1e3a5f;color:var(--blue)}.bdry{background:#3b1f00;color:var(--amber)}.bcrit{background:#3b0000;color:var(--red)}.bnodata{background:#1a1a1a;color:var(--muted)}
+.bok{background:#14301e;color:var(--green)}.bwet{background:#1e3a5f;color:var(--blue)}.bdry{background:#3b1f00;color:var(--amber)}.bcrit{background:#3b0000;color:var(--red)}
+
+/* WEEKLY */
 .wc{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:18px;margin-bottom:14px}
 .ww{height:145px;position:relative;margin-top:10px}
+
+/* EMAIL CARD */
 .ec{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:18px;margin-bottom:20px}
 .ef{display:grid;grid-template-columns:1fr 1fr auto;gap:10px;align-items:end;margin-top:12px}
 .eff label{font-size:.58rem;font-family:'Space Mono',monospace;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;display:block;margin-bottom:5px}
@@ -148,10 +176,11 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
 .es{font-size:.7rem;color:var(--muted);margin-top:8px;font-family:'Space Mono',monospace}
 .test-btn{padding:7px 12px;background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:8px;font-family:'Space Mono',monospace;font-size:.65rem;cursor:pointer;margin-top:8px;transition:all .2s}
 .test-btn:hover{border-color:var(--green);color:var(--green)}
+
+/* TOAST */
 .toast{position:fixed;top:18px;right:18px;background:var(--card);border:1px solid var(--green);border-radius:11px;padding:10px 14px;font-size:.74rem;z-index:500;animation:slideUp .3s ease;display:flex;align-items:center;gap:8px;max-width:290px;box-shadow:0 4px 20px var(--shadow)}
 .toast.error{border-color:var(--red)}.toast.warn{border-color:var(--amber)}.toast.info{border-color:var(--purple)}
-/* FIX: Sensor error warning strip */
-.sensor-warn{display:none;padding:8px 14px;border-radius:9px;margin-bottom:10px;background:#3b1f00;border:1px solid #5a3a00;color:var(--amber);font-size:.75rem;font-family:'Space Mono',monospace;align-items:center;gap:8px}
+
 @media(max-width:900px){
   .main{padding:12px}.sr{grid-template-columns:1fr}
   .stats{grid-template-columns:1fr 1fr}.cr{grid-template-columns:1fr}
@@ -162,9 +191,13 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
 </head>
 <body>
 
+<!-- LOGIN -->
 <div class="login-page" id="loginPage">
   <div class="login-box">
-    <div class="ll"><div class="li">🌱</div><div><h1>SoilSense Pro</h1><p>Smart IoT Monitoring</p></div></div>
+    <div class="ll">
+      <div class="li">🌱</div>
+      <div><h1>SoilSense Pro</h1><p>Smart IoT Monitoring</p></div>
+    </div>
     <div class="lt" id="lTitle">Welcome back</div>
     <div class="ls" id="lSub">Sign in to your dashboard</div>
     <div class="lf"><label>Email</label><input type="email" id="eIn" placeholder="ganesh@gmail.com" onkeydown="if(event.key==='Enter')doAuth()"/></div>
@@ -176,14 +209,14 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
   </div>
 </div>
 
+<!-- HEADER -->
 <header class="header" id="mHeader" style="display:none">
   <div class="logo">
     <div class="logo-icon">🌱</div>
-    <div class="logo-text"><h1>SoilSense Pro</h1><p>soilsense-iot-d1c31 · ESP32 · v2.3</p></div>
+    <div class="logo-text"><h1>SoilSense Pro</h1><p>soilsense-iot-d1c31 · ESP32 · v2.1</p></div>
   </div>
   <div class="hr">
     <div class="lc" id="liveChip" style="display:none"><span class="ld"></span> LIVE</div>
-    <div class="esp-chip waiting" id="espChip">📡 ESP32 Waiting...</div>
     <div class="cb2"><span class="cd" id="cDot"></span><span id="cLabel">Connecting...</span></div>
     <div class="uc">👤 <span id="uEmail">--</span></div>
     <button class="hb" onclick="exportCSV()">📥 CSV</button>
@@ -193,14 +226,13 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
   </div>
 </header>
 
+<!-- DASHBOARD -->
 <main class="main" id="mDash" style="display:none">
+
   <div class="banner" id="banner"><span class="bdot" id="bdot" style="background:var(--muted)"></span><span id="btext">Connecting...</span></div>
   <div class="dry-banner" id="dryBanner">🚨 DRY SOIL ALERT — Water your plant immediately!</div>
 
-  <!-- FIX 2 & 3: Sensor disconnection warnings -->
-  <div class="sensor-warn" id="soilWarn">⚠️ Soil sensor may be disconnected — reading ~100% (ADC open circuit). Check wiring.</div>
-  <div class="sensor-warn" id="tempWarn">⚠️ DHT11 sensor may be disconnected — temperature/humidity reading 0. Check wiring.</div>
-
+  <!-- SENSOR CARDS -->
   <div class="sr">
     <div class="sc sc1">
       <div class="scl">Soil Moisture</div>
@@ -210,7 +242,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
         <div class="mi"><label>Last Read</label><span id="lRead">--</span></div>
         <div class="mi"><label>Raw ADC</label><span id="rAdc">--</span></div>
         <div class="mi"><label>Total Reads</label><span id="rCount">0</span></div>
-        <div class="mi"><label>ESP32</label><span id="espStatus" style="color:var(--amber)">Waiting</span></div>
+        <div class="mi"><label>Alert</label><span id="aStatus" style="color:var(--green)">Normal</span></div>
       </div>
     </div>
     <div class="sc sc2">
@@ -241,6 +273,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
     </div>
   </div>
 
+  <!-- AI CARD -->
   <div class="ai-card">
     <div class="ai-h">
       <span style="font-size:1.2rem">🤖</span>
@@ -260,6 +293,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
     </div>
   </div>
 
+  <!-- STATS -->
   <div class="stats">
     <div class="stc"><div class="stl">Soil Now</div><div class="stv" id="sCur" style="color:var(--green)">--</div><div class="sts">% moisture</div></div>
     <div class="stc"><div class="stl">Session High</div><div class="stv" id="sHi" style="color:var(--blue)">--</div><div class="sts">% moisture</div></div>
@@ -267,6 +301,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
     <div class="stc"><div class="stl">Humidity</div><div class="stv" id="sHum" style="color:var(--blue)">--</div><div class="sts">% RH current</div></div>
   </div>
 
+  <!-- CHARTS -->
   <div class="cr">
     <div class="cc">
       <div class="ch"><span class="ct">Soil Moisture Trend</span><span style="font-size:.6rem;font-family:'Space Mono',monospace;color:var(--muted)" id="sPts">0 pts</span></div>
@@ -278,10 +313,11 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
     </div>
   </div>
 
+  <!-- BOTTOM -->
   <div class="br">
     <div class="pc">
       <div class="ch" style="margin-bottom:0"><span class="ct">Alerts</span><span style="font-size:.6rem;color:var(--muted);font-family:'Space Mono',monospace" id="aCnt">0</span></div>
-      <div class="sw" id="aList"><div class="nd">Waiting for live data...</div></div>
+      <div class="sw" id="aList"><div class="nd">Waiting...</div></div>
     </div>
     <div class="pc">
       <div class="ch" style="margin-bottom:0"><span class="ct">Recent Readings</span></div>
@@ -294,15 +330,17 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
     </div>
   </div>
 
+  <!-- WEEKLY -->
   <div class="wc">
     <div class="ch"><span class="ct">Weekly Soil Average</span></div>
     <div class="ww"><canvas id="wkChart"></canvas></div>
   </div>
 
+  <!-- EMAIL SETTINGS -->
   <div class="ec">
     <div class="ch" style="margin-bottom:0">
       <span class="ct">📧 Email Alert Settings</span>
-      <span style="font-size:.6rem;font-family:'Space Mono',monospace;color:var(--muted)">Only sends when ESP32 is live connected</span>
+      <span style="font-size:.6rem;font-family:'Space Mono',monospace;color:var(--muted)">Powered by EmailJS — sends real emails!</span>
     </div>
     <div class="ef">
       <div class="eff"><label>Alert Email</label><input type="email" id="aEmail" placeholder="ganesh@gmail.com"/></div>
@@ -312,14 +350,17 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
     <button class="test-btn" onclick="sendTestEmail()">📤 Send Test Email</button>
     <div class="es" id="eStatus">Not configured — enter email and save.</div>
   </div>
+
 </main>
 
 <script>
+// ══ EMAILJS INIT ══════════════════════════════
 const EMAILJS_SERVICE  = "service_rj3sq3y";
 const EMAILJS_TEMPLATE = "template_z90i26a";
 const EMAILJS_PUBLIC   = "qPr-jzIwW1BHiFvsS";
 emailjs.init(EMAILJS_PUBLIC);
 
+// ══ FIREBASE CONFIG ═══════════════════════════
 const firebaseConfig = {
   apiKey:            "AIzaSyDo4jyrbgxz7x585UEL9wKcfJQzWBwSPbM",
   authDomain:        "soilsense-iot-d1c31.firebaseapp.com",
@@ -332,114 +373,50 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database(), auth = firebase.auth();
 
+// ══ STATE ═════════════════════════════════════
 let readings=[], alerts=[], aDebounce={};
 let soilHigh=null, tempMin=null, tempMax=null, tempSum=0;
 let humMin=null, humMax=null, humSum=0, sCount=0;
 let emailCfg = JSON.parse(localStorage.getItem('ss_email')||'{}');
 let isLoginMode=true, isDark=true;
 
-let lastHistoricalKey = null;
-let historicalLoadDone = false;
-let espLive = false;
-let espLastSeen = null;
-let espWatchdog = null;
-
-// ══════════════════════════════════════════════════════════
-//  SENSOR VALIDATION — THE ROOT CAUSE OF YOUR BUGS
-//
-//  BUG 1: Soil = 100% when disconnected
-//    → When no sensor is connected, the ADC pin floats to 0.
-//      Your ESP32 firmware maps raw ADC 0 → 100% moisture.
-//      FIX: Detect raw ADC near 0 (typically 0–50) or the
-//           computed value being exactly/near 100 while raw
-//           is suspiciously low, and flag it as invalid.
-//
-//  BUG 2: Temp = 0°C when disconnected
-//    → DHT11 returns 0 on read failure. Your code shows 0.
-//      FIX: Treat temperature=0 AND humidity=0 as a sensor
-//           error (DHT11 never legitimately reads 0°C + 0%RH
-//           simultaneously in any real environment).
-//
-//  We validate BEFORE updating the UI and show warnings.
-// ══════════════════════════════════════════════════════════
-
-/**
- * Returns true if the soil sensor reading looks valid.
- * Invalid = raw ADC is 0 or near-zero (open circuit / disconnected).
- * Adjust RAW_MIN threshold to match your hardware (typically 50–200 for ESP32).
- */
-function isSoilValid(raw, value) {
-  const RAW_MIN = 50; // ADC counts — below this = sensor likely disconnected
-  if (raw === undefined || raw === null) return false;
-  if (raw < RAW_MIN) return false;   // open circuit / not connected
-  return true;
-}
-
-/**
- * Returns true if the DHT11 temperature/humidity reading looks valid.
- * DHT11 returns 0,0 on a read error or when not connected.
- * A real environment will never be exactly 0°C AND 0% RH at the same time.
- */
-function isTempValid(temp, hum) {
-  if (temp === 0 && hum === 0) return false;  // classic DHT11 failure/disconnect
-  if (temp === undefined || temp === null) return false;
-  if (hum === undefined || hum === null) return false;
-  return true;
-}
-
-function setESPOnline() {
-  espLive = true;
-  espLastSeen = Date.now();
-  document.getElementById('espChip').className   = 'esp-chip online';
-  document.getElementById('espChip').textContent = '📡 ESP32 Online';
-  document.getElementById('espStatus').textContent = 'Online';
-  document.getElementById('espStatus').style.color = 'var(--green)';
-
-  clearTimeout(espWatchdog);
-  espWatchdog = setTimeout(() => {
-    espLive = false;
-    document.getElementById('espChip').className   = 'esp-chip offline';
-    document.getElementById('espChip').textContent = '📡 ESP32 Offline';
-    document.getElementById('espStatus').textContent = 'Offline';
-    document.getElementById('espStatus').style.color = 'var(--red)';
-    addAlert('📡','ESP32 disconnected — no data received for 20s','warn');
-  }, 20000);
-}
-
-function setESPWaiting() {
-  espLive = false;
-  document.getElementById('espChip').className   = 'esp-chip waiting';
-  document.getElementById('espChip').textContent = '📡 ESP32 Waiting...';
-  document.getElementById('espStatus').textContent = 'Waiting';
-  document.getElementById('espStatus').style.color = 'var(--amber)';
-}
-
+// ══ CLOCK ════════════════════════════════════
 setInterval(()=>{ document.getElementById('clk').textContent=new Date().toLocaleTimeString('en-IN',{hour12:false}); },1000);
 
+// ══ AUTH ═════════════════════════════════════
 function toggleMode(){
   isLoginMode=!isLoginMode;
-  document.getElementById('lTitle').textContent=isLoginMode?'Welcome back':'Create account';
-  document.getElementById('lSub').textContent=isLoginMode?'Sign in to your dashboard':'Register to start monitoring';
-  document.getElementById('aBtn').textContent=isLoginMode?'Sign In':'Create Account';
-  document.getElementById('lTog').innerHTML=isLoginMode?'Don\'t have an account? <span>Create one</span>':'Already have an account? <span>Sign in</span>';
+  document.getElementById('lTitle').textContent = isLoginMode?'Welcome back':'Create account';
+  document.getElementById('lSub').textContent   = isLoginMode?'Sign in to your dashboard':'Register to start monitoring';
+  document.getElementById('aBtn').textContent   = isLoginMode?'Sign In':'Create Account';
+  document.getElementById('lTog').innerHTML     = isLoginMode
+    ? 'Don\'t have an account? <span>Create one</span>'
+    : 'Already have an account? <span>Sign in</span>';
   document.getElementById('lErr').style.display='none';
 }
 
 function doAuth(){
   const email=document.getElementById('eIn').value.trim();
-  const pass=document.getElementById('pIn').value;
-  const btn=document.getElementById('aBtn');
+  const pass =document.getElementById('pIn').value;
+  const btn  =document.getElementById('aBtn');
   if(!email||!pass){showErr('Enter email and password.');return;}
-  btn.disabled=true;btn.textContent='Please wait...';
-  const fn=isLoginMode?auth.signInWithEmailAndPassword(email,pass):auth.createUserWithEmailAndPassword(email,pass);
-  fn.then(c=>{document.getElementById('uEmail').textContent=c.user.email.split('@')[0];showDash();})
-    .catch(e=>{showErr(e.message.replace('Firebase: ','').replace(/\(.*\)/,''));btn.disabled=false;btn.textContent=isLoginMode?'Sign In':'Create Account';});
+  btn.disabled=true; btn.textContent='Please wait...';
+  const fn = isLoginMode
+    ? auth.signInWithEmailAndPassword(email,pass)
+    : auth.createUserWithEmailAndPassword(email,pass);
+  fn.then(c=>{
+    document.getElementById('uEmail').textContent=c.user.email.split('@')[0];
+    showDash();
+  }).catch(e=>{
+    showErr(e.message.replace('Firebase: ','').replace(/\(.*\)/,''));
+    btn.disabled=false;
+    btn.textContent=isLoginMode?'Sign In':'Create Account';
+  });
 }
 
 function showErr(m){const e=document.getElementById('lErr');e.textContent=m;e.style.display='block';}
 
 function doSignOut(){
-  clearTimeout(espWatchdog);
   auth.signOut().then(()=>{
     document.getElementById('loginPage').style.display='flex';
     document.getElementById('mHeader').style.display='none';
@@ -448,9 +425,6 @@ function doSignOut(){
     document.getElementById('aBtn').textContent='Sign In';
     document.getElementById('eIn').value='';
     document.getElementById('pIn').value='';
-    lastHistoricalKey = null;
-    historicalLoadDone = false;
-    espLive = false;
   });
 }
 
@@ -461,13 +435,14 @@ function showDash(){
   if(emailCfg.email){
     document.getElementById('aEmail').value=emailCfg.email;
     document.getElementById('aThresh').value=emailCfg.threshold||30;
-    document.getElementById('eStatus').textContent=`✅ Active → ${emailCfg.email} (threshold: ${emailCfg.threshold||30}%) · Only sends when ESP32 is live`;
+    document.getElementById('eStatus').textContent=`✅ Active → ${emailCfg.email} (threshold: ${emailCfg.threshold||30}%)`;
   }
   startListeners();
 }
 
-auth.onAuthStateChanged(u=>{if(u){document.getElementById('uEmail').textContent=u.email.split('@')[0];showDash();}});
+auth.onAuthStateChanged(u=>{ if(u){ document.getElementById('uEmail').textContent=u.email.split('@')[0]; showDash(); } });
 
+// ══ THEME ════════════════════════════════════
 function toggleTheme(){
   isDark=!isDark;
   document.documentElement.setAttribute('data-theme',isDark?'dark':'light');
@@ -475,6 +450,7 @@ function toggleTheme(){
   toast('🎨',isDark?'Dark mode':'Light mode');
 }
 
+// ══ GAUGE ════════════════════════════════════
 const gCtx=document.getElementById('gc').getContext('2d');
 function drawGauge(v,c){
   const cx=74,cy=81,r=57,sA=Math.PI*.75,eA=Math.PI*2.25,tA=eA-sA;
@@ -491,6 +467,7 @@ function drawGauge(v,c){
 }
 drawGauge(null,'#4ade80');
 
+// ══ CHARTS ═══════════════════════════════════
 function mo(min,max){
   return{responsive:true,maintainAspectRatio:false,animation:{duration:400},
     scales:{x:{ticks:{color:'#6b8f72',font:{family:'Space Mono',size:8},maxTicksLimit:8},grid:{color:'#1f3025'}},
@@ -521,42 +498,41 @@ const days=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
 const wkChart=new Chart(document.getElementById('wkChart').getContext('2d'),{
   type:'bar',data:{labels:days,datasets:[{data:[0,0,0,0,0,0,0],backgroundColor:days.map((_,i)=>i===(new Date().getDay()||7)-1?'#4ade80':'#4ade8028'),borderColor:'#4ade80',borderWidth:1,borderRadius:4}]},options:mo(0,100)});
 
-function getSS(v,soilOk){
-  // FIX: If soil sensor is not connected, show "No Data" state
-  if(!soilOk) return{label:'⚪ No Sensor',cls:'s-nodata',color:'#6b8f72',bc:'bnodata'};
+// ══ STATUS HELPERS ════════════════════════════
+function getSS(v){
   if(v<30)return{label:'🔴 Dry — Water Now!',cls:'s-crit',color:'#f87171',bc:'bcrit'};
   if(v<60)return{label:'🟡 Moist',           cls:'s-dry', color:'#fbbf24',bc:'bdry'};
   if(v<80)return{label:'🟢 Optimal',         cls:'s-ok',  color:'#4ade80',bc:'bok'};
   return        {label:'🔵 Wet',             cls:'s-wet', color:'#60a5fa',bc:'bwet'};
 }
-function getTS(t,tempOk){
-  // FIX: If temp sensor not connected, show "No Data"
-  if(!tempOk) return{label:'⚪ No Sensor',cls:'s-nodata'};
-  if(t<10)return{label:'🔵 Cold',cls:'s-cold'};
+function getTS(t){
+  if(t<10)return{label:'🔵 Cold',  cls:'s-cold'};
   if(t<25)return{label:'🟢 Normal',cls:'s-normal'};
-  if(t<35)return{label:'🟡 Warm',cls:'s-warm'};
-  return{label:'🔴 Hot',cls:'s-hot'};
+  if(t<35)return{label:'🟡 Warm',  cls:'s-warm'};
+  return       {label:'🔴 Hot',   cls:'s-hot'};
 }
-function getHS(h,tempOk){
-  if(!tempOk) return{label:'⚪ No Sensor',cls:'s-nodata'};
-  if(h<30)return{label:'🟡 Low',cls:'s-warm'};
+function getHS(h){
+  if(h<30)return{label:'🟡 Low',   cls:'s-warm'};
   if(h<60)return{label:'🟢 Normal',cls:'s-normal'};
-  return{label:'🔵 High',cls:'s-cold'};
+  return       {label:'🔵 High',  cls:'s-cold'};
 }
 function setBanner(c,t){document.getElementById('bdot').style.background=c;document.getElementById('btext').textContent=t;}
 
+// ══ AI PREDICTION ═════════════════════════════
 function runAI(){
   if(readings.length<5){document.getElementById('aiUp').textContent=`Need ${5-readings.length} more...`;return;}
   const r=readings.slice(0,Math.min(20,readings.length));
   let drop=0,pairs=0;
   for(let i=0;i<r.length-1;i++){const d=r[i+1].soil-r[i].soil;if(d<0){drop+=Math.abs(d);pairs++;}}
   const avgDrop=pairs>0?drop/pairs:0.3;
-  const dph=avgDrop*(3600/5);
+  const rph=3600/5;
+  const dph=avgDrop*rph;
   const cur=r[0].soil;
   const hl=dph>0?(cur-30)/dph:99;
   const hDisp=hl>48?'>48h':hl>1?`${hl.toFixed(1)}h`:`${Math.round(hl*60)}min`;
   const nw=new Date(Date.now()+hl*3600000);
   const nwStr=hl>48?'Not soon':nw.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',hour12:true});
+  const drStr=dph<0.1?'Stable':`${dph.toFixed(1)}%/hr`;
   let act='All good 🌿';
   if(cur<30)act='Water NOW 🚨';
   else if(hl<2)act='Water soon ⚠️';
@@ -564,7 +540,7 @@ function runAI(){
   else if(hl<24)act='Tomorrow 📅';
   const conf=Math.min(95,Math.round((readings.length/20)*100));
   document.getElementById('aiNW').textContent=nwStr;
-  document.getElementById('aiDR').textContent=dph<0.1?'Stable':`${dph.toFixed(1)}%/hr`;
+  document.getElementById('aiDR').textContent=drStr;
   document.getElementById('aiHL').textContent=hDisp;
   document.getElementById('aiAct').textContent=act;
   document.getElementById('aiBar').style.width=conf+'%';
@@ -572,27 +548,33 @@ function runAI(){
   document.getElementById('aiUp').textContent='Updated '+new Date().toLocaleTimeString('en-IN',{hour12:false});
 }
 
+// ══ EMAIL ═════════════════════════════════════
 function saveEmail(){
   const em=document.getElementById('aEmail').value.trim();
   const th=parseInt(document.getElementById('aThresh').value)||30;
   if(!em){toast('❌','Enter a valid email','error');return;}
   emailCfg={email:em,threshold:th};
   localStorage.setItem('ss_email',JSON.stringify(emailCfg));
-  document.getElementById('eStatus').textContent=`✅ Active → ${em} (threshold: ${th}%) · Only sends when ESP32 is live`;
+  document.getElementById('eStatus').textContent=`✅ Active → ${em} (threshold: ${th}%)`;
   toast('✅',`Email alerts enabled for ${em}`);
 }
 
 function sendTestEmail(){
   if(!emailCfg.email){toast('❌','Save your email first!','error');return;}
-  emailjs.send(EMAILJS_SERVICE,EMAILJS_TEMPLATE,{
-    to_email:emailCfg.email,soil_pct:'25',temperature:'28.5',
-    humidity:'65',status:'Dry — Test Alert',time:new Date().toLocaleString('en-IN')
-  }).then(()=>toast('📧','Test email sent! Check inbox.'))
-    .catch(e=>{toast('❌','Email failed: '+e.text,'error');console.error(e);});
+  const params={
+    to_email:    emailCfg.email,
+    soil_pct:    '25',
+    temperature: '28.5',
+    humidity:    '65',
+    status:      'Dry — Test Alert',
+    time:        new Date().toLocaleString('en-IN')
+  };
+  emailjs.send(EMAILJS_SERVICE, EMAILJS_TEMPLATE, params)
+    .then(()=>{ toast('📧','Test email sent! Check inbox.'); })
+    .catch(e=>{ toast('❌','Email failed: '+e.text,'error'); console.error(e); });
 }
 
 function checkEmail(soil){
-  if(!espLive) return;
   if(!emailCfg.email) return;
   const th=emailCfg.threshold||30;
   if(soil>=th) return;
@@ -600,29 +582,27 @@ function checkEmail(soil){
   const now=Date.now();
   if(aDebounce[key]&&now-aDebounce[key]<300000) return;
   aDebounce[key]=now;
-  emailjs.send(EMAILJS_SERVICE,EMAILJS_TEMPLATE,{
+  const params={
     to_email:    emailCfg.email,
     soil_pct:    soil.toFixed(1),
     temperature: document.getElementById('tVal').textContent,
     humidity:    document.getElementById('hVal').textContent,
     status:      'DRY — Immediate Watering Needed!',
     time:        new Date().toLocaleString('en-IN')
-  }).then(()=>{
-    addAlert('📧',`Email sent → ${emailCfg.email}`,'info');
-    toast('📧',`Alert sent to ${emailCfg.email}!`,'info');
-  }).catch(e=>console.error('EmailJS:',e));
+  };
+  emailjs.send(EMAILJS_SERVICE, EMAILJS_TEMPLATE, params)
+    .then(()=>{
+      addAlert('📧',`Email alert sent → ${emailCfg.email}`,'info');
+      toast('📧',`Alert sent to ${emailCfg.email}!`,'info');
+    })
+    .catch(e=>{ console.error('EmailJS error:',e); });
 }
 
+// ══ CSV EXPORT ════════════════════════════════
 function exportCSV(){
   if(!readings.length){toast('❌','No data yet!','error');return;}
-  const h=['Time','Date','Soil %','Raw','Temp °C','Humidity %','Heat Index','Status','SoilOK','TempOK'];
-  const rows=readings.map(r=>[r.timeStr,r.dateStr,
-    r.soilOk?r.soil.toFixed(1):'N/A',r.raw,
-    r.tempOk?r.temp.toFixed(1):'N/A',
-    r.tempOk?r.hum.toFixed(1):'N/A',
-    r.tempOk?r.hi.toFixed(1):'N/A',
-    r.ss.label.replace(/[🔴🟡🟢🔵⚪]/g,'').trim(),
-    r.soilOk?'yes':'no',r.tempOk?'yes':'no']);
+  const h=['Time','Date','Soil %','Raw','Temp °C','Humidity %','Heat Index','Status'];
+  const rows=readings.map(r=>[r.timeStr,r.dateStr,r.soil.toFixed(1),r.raw,r.temp.toFixed(1),r.hum.toFixed(1),r.hi.toFixed(1),r.ss.label.replace(/[🔴🟡🟢🔵]/g,'').trim()]);
   const csv=[h,...rows].map(r=>r.join(',')).join('\n');
   const a=document.createElement('a');
   a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
@@ -631,157 +611,100 @@ function exportCSV(){
   toast('📥',`Exported ${readings.length} readings!`);
 }
 
-function updateDash(d, fromLive){
-  const rawSoil = parseFloat(d.value) || 0;
-  const raw     = d.raw || 0;
-  const rawTemp = parseFloat(d.temperature) || 0;
-  const rawHum  = parseFloat(d.humidity) || 0;
-  const hi      = parseFloat(d.heat_index) || 0;
-  const ts      = d.timestamp ? new Date(d.timestamp) : new Date();
-  const timeStr = ts.toLocaleTimeString('en-IN',{hour12:false});
-  const dateStr = ts.toLocaleDateString('en-IN');
+// ══ UPDATE UI ═════════════════════════════════
+function updateDash(d){
+  const soil=parseFloat(d.value)||0;
+  const raw =d.raw||0;
+  const temp=parseFloat(d.temperature)||0;
+  const hum =parseFloat(d.humidity)||0;
+  const hi  =parseFloat(d.heat_index)||0;
+  const isAl=d.alert===true||soil<30;
+  const ts  =d.timestamp?new Date(d.timestamp):new Date();
+  const timeStr=ts.toLocaleTimeString('en-IN',{hour12:false});
+  const dateStr=ts.toLocaleDateString('en-IN');
+  const ss=getSS(soil), ts2=getTS(temp), hs=getHS(hum);
 
-  // ── FIX 2 & 3: Validate sensors before using values ──
-  const soilOk = isSoilValid(raw, rawSoil);
-  const tempOk = isTempValid(rawTemp, rawHum);
-
-  // Use validated values or safe fallbacks
-  const soil = soilOk ? rawSoil : 0;
-  const temp = tempOk ? rawTemp : 0;
-  const hum  = tempOk ? rawHum  : 0;
-
-  // Show/hide sensor warning banners
-  document.getElementById('soilWarn').style.display = (!soilOk && fromLive) ? 'flex' : 'none';
-  document.getElementById('tempWarn').style.display = (!tempOk && fromLive) ? 'flex' : 'none';
-
-  const isAl  = d.alert === true || (soilOk && soil < 30);
-  const ss    = getSS(soil, soilOk);
-  const ts2   = getTS(temp, tempOk);
-  const hs    = getHS(hum, tempOk);
-
-  // ── Gauge: show "--" and grey if no sensor ──
-  if(soilOk){
-    drawGauge(soil, ss.color);
-    const gv=document.getElementById('sVal'); gv.textContent=soil.toFixed(1); gv.style.color=ss.color;
-  } else {
-    drawGauge(0, '#6b8f72');
-    const gv=document.getElementById('sVal'); gv.textContent='--'; gv.style.color='var(--muted)';
-  }
-
+  // Gauge + soil card
+  drawGauge(soil,ss.color);
+  const gv=document.getElementById('sVal'); gv.textContent=soil.toFixed(1); gv.style.color=ss.color;
   const sb=document.getElementById('sBadge'); sb.textContent=ss.label; sb.className='scb '+ss.cls;
-  document.getElementById('rAdc').textContent   = raw;
-  document.getElementById('lRead').textContent  = timeStr;
-  document.getElementById('rCount').textContent = ++sCount;
+  document.getElementById('rAdc').textContent=raw;
+  document.getElementById('lRead').textContent=timeStr;
+  document.getElementById('rCount').textContent=++sCount;
+  document.getElementById('aStatus').textContent=isAl?'🚨 DRY':'✅ Normal';
+  document.getElementById('aStatus').style.color=isAl?'var(--red)':'var(--green)';
+  document.getElementById('dryBanner').style.display=isAl?'flex':'none';
 
-  // Dry banner only on live valid data
-  document.getElementById('dryBanner').style.display = (isAl && fromLive && soilOk) ? 'flex' : 'none';
-
-  // ── Temperature display ──
-  if(tempOk){
-    document.getElementById('tVal').textContent = temp.toFixed(1);
-    document.getElementById('tVal').style.color = 'var(--orange)';
-    document.getElementById('hIdx').textContent = hi.toFixed(1)+'°C';
-  } else {
-    document.getElementById('tVal').textContent = '--';
-    document.getElementById('tVal').style.color = 'var(--muted)';
-    document.getElementById('hIdx').textContent = '--';
-  }
+  // Temp card
+  document.getElementById('tVal').textContent=temp.toFixed(1);
   const tb=document.getElementById('tBadge'); tb.textContent=ts2.label; tb.className='scb '+ts2.cls;
+  document.getElementById('hIdx').textContent=hi.toFixed(1)+'°C';
+  if(tempMin===null||temp<tempMin){tempMin=temp;document.getElementById('tMin').textContent=temp.toFixed(1);}
+  if(tempMax===null||temp>tempMax){tempMax=temp;document.getElementById('tMax').textContent=temp.toFixed(1);}
+  tempSum+=temp; document.getElementById('tAvg').textContent=(tempSum/sCount).toFixed(1);
 
-  if(tempOk){
-    if(tempMin===null||temp<tempMin){tempMin=temp;document.getElementById('tMin').textContent=temp.toFixed(1);}
-    if(tempMax===null||temp>tempMax){tempMax=temp;document.getElementById('tMax').textContent=temp.toFixed(1);}
-    tempSum+=temp;
-  }
-
-  // ── Humidity display ──
-  if(tempOk){
-    document.getElementById('hVal').textContent = hum.toFixed(1);
-    document.getElementById('hVal').style.color = 'var(--blue)';
-  } else {
-    document.getElementById('hVal').textContent = '--';
-    document.getElementById('hVal').style.color = 'var(--muted)';
-  }
+  // Hum card
+  document.getElementById('hVal').textContent=hum.toFixed(1);
   const hb=document.getElementById('hBadge'); hb.textContent=hs.label; hb.className='scb '+hs.cls;
+  if(humMin===null||hum<humMin){humMin=hum;document.getElementById('hMin').textContent=hum.toFixed(1);}
+  if(humMax===null||hum>humMax){humMax=hum;document.getElementById('hMax').textContent=hum.toFixed(1);}
+  humSum+=hum; document.getElementById('hAvg').textContent=(humSum/sCount).toFixed(1);
 
-  if(tempOk){
-    if(humMin===null||hum<humMin){humMin=hum;document.getElementById('hMin').textContent=hum.toFixed(1);}
-    if(humMax===null||hum>humMax){humMax=hum;document.getElementById('hMax').textContent=hum.toFixed(1);}
-    humSum+=hum;
-  }
+  // Stats
+  document.getElementById('sCur').textContent=soil.toFixed(1);
+  document.getElementById('sTmp').textContent=temp.toFixed(1);
+  document.getElementById('sHum').textContent=hum.toFixed(1);
+  if(soilHigh===null||soil>soilHigh){soilHigh=soil;document.getElementById('sHi').textContent=soil.toFixed(1);}
 
-  // Avg uses only valid readings count
-  const validCount = readings.filter(r=>r.tempOk).length + (tempOk?1:0);
-  if(validCount>0){
-    document.getElementById('tAvg').textContent = ((tempSum)/validCount).toFixed(1);
-    document.getElementById('hAvg').textContent = ((humSum)/validCount).toFixed(1);
-  }
-
-  // Stats bar
-  document.getElementById('sCur').textContent = soilOk ? soil.toFixed(1) : '--';
-  document.getElementById('sTmp').textContent = tempOk ? temp.toFixed(1) : '--';
-  document.getElementById('sHum').textContent = tempOk ? hum.toFixed(1)  : '--';
-  if(soilOk && (soilHigh===null||soil>soilHigh)){soilHigh=soil;document.getElementById('sHi').textContent=soil.toFixed(1);}
-
-  // Charts — only plot valid sensor data
-  if(soilOk){
-    soilChart.data.labels.push(timeStr);
-    soilChart.data.datasets[0].data.push(parseFloat(soil.toFixed(1)));
-    if(soilChart.data.labels.length>20){soilChart.data.labels.shift();soilChart.data.datasets[0].data.shift();}
-    soilChart.update();
-  }
+  // Soil chart
+  soilChart.data.labels.push(timeStr);
+  soilChart.data.datasets[0].data.push(parseFloat(soil.toFixed(1)));
+  if(soilChart.data.labels.length>20){soilChart.data.labels.shift();soilChart.data.datasets[0].data.shift();}
+  soilChart.update();
   document.getElementById('sPts').textContent=soilChart.data.labels.length+' pts';
 
-  if(tempOk){
-    thChart.data.labels.push(timeStr);
-    thChart.data.datasets[0].data.push(parseFloat(temp.toFixed(1)));
-    thChart.data.datasets[1].data.push(parseFloat(hum.toFixed(1)));
-    if(thChart.data.labels.length>20){thChart.data.labels.shift();thChart.data.datasets[0].data.shift();thChart.data.datasets[1].data.shift();}
-    thChart.update();
-  }
+  // Temp+Hum chart
+  thChart.data.labels.push(timeStr);
+  thChart.data.datasets[0].data.push(parseFloat(temp.toFixed(1)));
+  thChart.data.datasets[1].data.push(parseFloat(hum.toFixed(1)));
+  if(thChart.data.labels.length>20){thChart.data.labels.shift();thChart.data.datasets[0].data.shift();thChart.data.datasets[1].data.shift();}
+  thChart.update();
   document.getElementById('tPts').textContent=thChart.data.labels.length+' pts';
 
-  readings.unshift({timeStr,dateStr,soil,temp,hum,raw,hi,ss,soilOk,tempOk});
+  // History
+  readings.unshift({timeStr,dateStr,soil,temp,hum,raw,hi,ss});
   if(readings.length>200)readings.pop();
-
   document.getElementById('hBody').innerHTML=
     readings.slice(0,12).map(r=>`<tr>
       <td>${r.timeStr}</td>
-      <td style="color:${r.soilOk?r.ss.color:'var(--muted)'};font-weight:700">${r.soilOk?r.soil.toFixed(1)+'%':'--'}</td>
-      <td style="color:${r.tempOk?'var(--orange)':'var(--muted)'}">${r.tempOk?r.temp.toFixed(1)+'°':'--'}</td>
-      <td style="color:${r.tempOk?'var(--blue)':'var(--muted)'}">${r.tempOk?r.hum.toFixed(1)+'%':'--'}</td>
+      <td style="color:${r.ss.color};font-weight:700">${r.soil.toFixed(1)}%</td>
+      <td style="color:var(--orange)">${r.temp.toFixed(1)}°</td>
+      <td style="color:var(--blue)">${r.hum.toFixed(1)}%</td>
       <td><span class="badge ${r.ss.bc}">${r.ss.cls.replace('s-','').toUpperCase()}</span></td>
     </tr>`).join('');
 
-  // Weekly chart — only valid soil
-  if(soilOk){
-    const di=(ts.getDay()||7)-1;
-    const tr=readings.filter(r=>r.dateStr===dateStr&&r.soilOk);
-    if(tr.length>0){
-      wkChart.data.datasets[0].data[di]=parseFloat((tr.reduce((a,r)=>a+r.soil,0)/tr.length).toFixed(1));
-      wkChart.update();
-    }
-  }
+  // Weekly
+  const di=(ts.getDay()||7)-1;
+  const tr=readings.filter(r=>r.dateStr===dateStr);
+  wkChart.data.datasets[0].data[di]=parseFloat((tr.reduce((a,r)=>a+r.soil,0)/tr.length).toFixed(1));
+  wkChart.update();
 
   // Banner
-  const soilStr = soilOk ? `Soil:${soil.toFixed(1)}%` : 'Soil:N/A';
-  const tempStr = tempOk ? `Temp:${temp.toFixed(1)}°C` : 'Temp:N/A';
-  const humStr  = tempOk ? `Hum:${hum.toFixed(1)}%`   : 'Hum:N/A';
-  setBanner(soilOk?ss.color:'#6b8f72',`${fromLive?'Live':'History'} · ${soilStr} · ${tempStr} · ${humStr} · ${timeStr}`);
+  setBanner(ss.color,`Live · Soil:${soil.toFixed(1)}% · Temp:${temp.toFixed(1)}°C · Hum:${hum.toFixed(1)}% · ${timeStr}`);
+
+  // AI
   runAI();
 
-  // Alerts & email ONLY on live valid data
-  if(fromLive){
-    if(isAl && soilOk) checkEmail(soil);
-    if(soilOk && soil<30) addAlert('🚨',`Dry soil ${soil.toFixed(1)}% — water now!`,'error');
-    if(tempOk && temp>38) addAlert('🌡️',`High temp ${temp.toFixed(1)}°C!`,'warn');
-    if(tempOk && hum<25)  addAlert('💧',`Low humidity ${hum.toFixed(1)}%`,'warn');
-    // Warn once if sensor disconnected (live only)
-    if(!soilOk) addAlert('⚠️','Soil sensor disconnected (ADC='+raw+')','warn');
-    if(!tempOk) addAlert('⚠️','DHT11 disconnected — temp/hum invalid','warn');
-  }
+  // Email alert check
+  if(isAl) checkEmail(soil);
+
+  // Alerts
+  if(soil<30) addAlert('🚨',`Dry soil ${soil.toFixed(1)}% — water now!`,'error');
+  if(temp>38) addAlert('🌡️',`High temp ${temp.toFixed(1)}°C!`,'warn');
+  if(hum<25)  addAlert('💧',`Low humidity ${hum.toFixed(1)}%`,'warn');
 }
 
+// ══ ADD ALERT ═════════════════════════════════
 function addAlert(icon,msg,type='ok'){
   const key=msg.slice(0,20),now=Date.now();
   if(aDebounce[key]&&now-aDebounce[key]<60000)return;
@@ -803,59 +726,22 @@ function toast(icon,msg,type='ok'){
   document.body.appendChild(t);setTimeout(()=>t.remove(),4000);
 }
 
+// ══ FIREBASE LISTENERS ════════════════════════
 function startListeners(){
   db.ref('.info/connected').on('value',snap=>{
     const ok=snap.val();
     document.getElementById('cDot').classList.toggle('live',ok);
     document.getElementById('cLabel').textContent=ok?'Firebase Connected':'Reconnecting...';
     document.getElementById('liveChip').style.display=ok?'flex':'none';
+    if(ok)addAlert('✅','Connected to Firebase');
   });
-
-  setBanner('#fbbf24','Loading historical data...');
-  setESPWaiting();
-
-  db.ref('sensor/moisture').limitToLast(50).once('value', snap => {
-    const keys = [];
-    const entries = [];
-
-    snap.forEach(child => {
-      keys.push(child.key);
-      entries.push(child.val());
-    });
-
-    if (!entries.length) {
-      setBanner('#fbbf24','Connected · No historical data — waiting for ESP32...');
-      lastHistoricalKey = null;
-      historicalLoadDone = true;
-      attachLiveListener();
-      return;
-    }
-
-    lastHistoricalKey = keys[keys.length - 1];
-
-    [...entries].reverse().forEach(d => {
-      if (d && d.value !== undefined) updateDash(d, false);
-    });
-
-    historicalLoadDone = true;
-    setBanner('#22c55e','Historical data loaded · Waiting for live ESP32...');
-    attachLiveListener();
+  db.ref('sensor/moisture').limitToLast(50).once('value',snap=>{
+    const e=[];snap.forEach(c=>e.push(c.val()));
+    if(!e.length){setBanner('#fbbf24','Connected · No data — flash ESP32');return;}
+    e.reverse().forEach(d=>{if(d&&d.value!==undefined)updateDash(d);});
   });
-}
-
-function attachLiveListener(){
-  db.ref('sensor/moisture').limitToLast(1).on('child_added', snap => {
-    const key = snap.key;
-    const d   = snap.val();
-
-    if (!d || d.value === undefined) return;
-
-    if (lastHistoricalKey !== null && key <= lastHistoricalKey) {
-      return;
-    }
-
-    setESPOnline();
-    updateDash(d, true);
+  db.ref('sensor/moisture').limitToLast(1).on('child_added',snap=>{
+    const d=snap.val();if(d&&d.value!==undefined)updateDash(d);
   });
 }
 </script>

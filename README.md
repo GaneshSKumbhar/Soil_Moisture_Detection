@@ -179,16 +179,6 @@ Template ID: template_z90i26a
 Public Key: qPr-jzIwW1BHiFvsS
 ```
 
-## 11. Screenshots
-
-### Dashboard Overview
-![SoilSense Pro Dashboard](images/soilMoistureDashboard.png)
-*Live gauges, AI predictions, temp/humidity cards, charts*
-
-### Firebase Realtime Data  
-![Firebase RTDB](images/RealTimeDatabase.png)
-*Live sensor/moisture/{timestamp} updates every 5s*
-
 ## 8. Firebase Data Structure
 
 Path: `/sensor/moisture/{epoch}`
@@ -225,6 +215,16 @@ Email: ganeshkumbhar638@gmail.com
 | **Soil=0%** | Calibration | Adjust DRY/WET values |
 | **No dashboard data** | Rules | `.read/.write = true` |
 | **No emails** | Config | Check EmailJS keys |
+
+## 11. Screenshots
+
+### Dashboard Overview
+![SoilSense Pro Dashboard](images/soilMoistureDashboard.png)
+*Live gauges, AI predictions, temp/humidity cards, charts*
+
+### Firebase Realtime Data
+![Firebase RTDB](images/RealTimeDatabase.png)
+*Live sensor/moisture/{timestamp} updates every 5s*
 
 ---
 

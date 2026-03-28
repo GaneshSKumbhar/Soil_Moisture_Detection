@@ -263,7 +263,7 @@
     <span class="nav-label">Hardware</span>
     <a class="nav-link" onclick="scrollTo('s6')"><span class="step-num">6</span> Circuit Wiring</a>
     <a class="nav-link" onclick="scrollTo('s7')"><span class="step-num">7</span> Arduino IDE Setup</a>
-    <a class="nav-link" onclick="scrollTo('s8')"><span class="step-num">8</span> NodeMCU Code</a>
+    <a class="nav-link" onclick="scrollTo('s8')"><span class="step-num">8</span> ESP32 Firmware</a>
   </div>
   <div class="nav-section">
     <span class="nav-label">Dashboard</span>
@@ -284,7 +284,7 @@
     <h2>Smart IoT Soil Monitoring System</h2>
     <p>Complete end-to-end setup — from wiring the NodeMCU to a live web dashboard connected to Firebase Realtime Database.</p>
     <div class="hero-tags">
-      <span class="badge badge-green">NodeMCU ESP8266</span>
+      <span class="badge badge-green">ESP32 Dev Module</span>
       <span class="badge badge-amber">Firebase RTDB</span>
       <span class="badge badge-blue">HTML Dashboard</span>
       <span class="badge badge-purple">Chart.js</span>
@@ -307,10 +307,12 @@
         <div class="card-title">🔩 Hardware Required</div>
         <table>
           <tr><th>Component</th><th>Qty</th></tr>
-          <tr><td>NodeMCU ESP8266 (v1/v2/v3)</td><td>1</td></tr>
+          <tr><td>ESP32 Dev Module (WROOM-32)</td><td>1</td></tr>
           <tr><td>Capacitive Soil Moisture Sensor</td><td>1</td></tr>
+          <tr><td>DHT11 Temperature & Humidity Sensor</td><td>1</td></tr>
           <tr><td>Micro USB Cable</td><td>1</td></tr>
-          <tr><td>Jumper Wires (F-M)</td><td>3</td></tr>
+          <tr><td>Jumper Wires (M-M)</td><td>10+</td></tr>
+          <tr><td>220Ω Resistor (for LED)</td><td>1</td></tr>
           <tr><td>Breadboard (optional)</td><td>1</td></tr>
         </table>
         <div class="alert alert-info" style="margin-top:10px">
@@ -353,19 +355,11 @@
 
     <div class="tree">
 <span class="c-amber">SoilSense-IoT/</span>
-├── <span class="c-amber">nodemcu/</span>
-│   └── <span class="c-blue">soil_monitor.ino</span>          <span class="c-muted">← Arduino firmware (upload to NodeMCU)</span>
+├── <span class="c-amber">esp32/</span>
+│   └── <span class="c-blue">soil_monitor.ino</span>          <span class="c-muted">← Arduino firmware (upload to ESP32)</span>
 │
-├── <span class="c-amber">dashboard/</span>
-│   ├── <span class="c-blue">index.html</span>                <span class="c-muted">← Main dashboard (open in browser)</span>
-│   ├── <span class="c-blue">firebase-config.js</span>        <span class="c-muted">← Your Firebase credentials</span>
-│   ├── <span class="c-blue">app.js</span>                    <span class="c-muted">← Dashboard logic (charts, alerts)</span>
-│   └── <span class="c-blue">style.css</span>                 <span class="c-muted">← Dashboard styles</span>
-│
-├── <span class="c-amber">docs/</span>
-│   ├── <span class="c-blue">circuit-diagram.png</span>        <span class="c-muted">← Wiring reference image</span>
-│   └── <span class="c-blue">project-report.pdf</span>        <span class="c-muted">← For submission</span>
-│
+├── <span class="c-blue">soil-monitor-dashboard.html</span> <span class="c-muted">← Live dashboard (open in browser)</span>
+├── <span class="c-blue">soilsense-complete-guide.html</span> <span class="c-muted">← This guide</span>
 └── <span class="c-blue">README.md</span>                     <span class="c-muted">← Project overview &amp; setup instructions</span>
     </div>
 
@@ -397,7 +391,7 @@
         <span class="step-icon">2️⃣</span>
         <div class="step-content">
           <h4>Create Project</h4>
-          <p>Name it <code>soilsense-iot</code> → Disable Google Analytics (not needed) → Click <strong>Create Project</strong></p>
+          <p>Name it <code>soilsense-iot-d1c31</code> → Disable Google Analytics (not needed) → Click <strong>Create Project</strong></p>
         </div>
       </div>
       <div class="step-item">
@@ -502,22 +496,22 @@
         <span class="code-lang">javascript — dashboard/firebase-config.js</span>
         <button class="copy-btn" onclick="copyCode(this)">Copy</button>
       </div>
-      <pre><span class="c-muted">// dashboard/firebase-config.js
-// Replace ALL values below with your Firebase project's config
-// Get these from: Firebase Console → Project Settings → Your Apps → SDK setup</span>
+      <pre><span class="c-muted">// soil-monitor-dashboard.html — embedded Firebase config
+// From: Firebase Console → Project Settings → Your Apps → SDK setup</span>
 
 <span class="c-purple">const</span> <span class="c-blue">firebaseConfig</span> = {
-  apiKey:            <span class="c-amber">"AIzaSyXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"</span>,
-  authDomain:        <span class="c-amber">"soilsense-iot.firebaseapp.com"</span>,
-  databaseURL:       <span class="c-amber">"https://soilsense-iot-default-rtdb.firebaseio.com"</span>,
-  projectId:         <span class="c-amber">"soilsense-iot"</span>,
-  storageBucket:     <span class="c-amber">"soilsense-iot.appspot.com"</span>,
-  messagingSenderId: <span class="c-amber">"123456789012"</span>,
-  appId:             <span class="c-amber">"1:123456789012:web:abcdefabcdefabcdef"</span>
+  apiKey:            <span class="c-amber">"AIzaSyDo4jyrbgxz7x585UEL9wKcfJQzWBwSPbM"</span>,
+  authDomain:        <span class="c-amber">"soilsense-iot-d1c31.firebaseapp.com"</span>,
+  databaseURL:       <span class="c-amber">"https://soilsense-iot-d1c31-default-rtdb.firebaseio.com"</span>,
+  projectId:         <span class="c-amber">"soilsense-iot-d1c31"</span>,
+  storageBucket:     <span class="c-amber">"soilsense-iot-d1c31.firebasestorage.app"</span>,
+  messagingSenderId: <span class="c-amber">"223496436985"</span>,
+  appId:             <span class="c-amber">"1:223496436985:web:e284abbb8e1f5769a47628"</span>
 };
 
-<span class="c-muted">// Path in Realtime Database where NodeMCU writes data</span>
-<span class="c-purple">const</span> <span class="c-blue">DB_PATH</span> = <span class="c-amber">"sensor/moisture"</span>;</pre>
+<span class="c-muted">// Path in Realtime Database where ESP32 writes data</span>
+<span class="c-muted">// Data format: /sensor/moisture/{epoch_timestamp}</span>
+<span class="c-muted">// Each entry: { value, raw, temperature, humidity, heat_index, timestamp, alert }</span></pre>
     </div>
   </div>
 
@@ -527,47 +521,100 @@
       <div class="section-num">6</div>
       <div>
         <div class="section-title">Circuit Wiring</div>
-        <div class="section-sub">Connect Soil Sensor → NodeMCU ESP8266</div>
+        <div class="section-sub">Connect all sensors → ESP32 Dev Module</div>
       </div>
     </div>
 
+    <h4>Soil Moisture Sensor (4-pin, capacitive)</h4>
+    <p>Only 3 of 4 pins used — <strong>DOUT pin is NOT connected.</strong></p>
     <div class="wiring">
       <div class="wire-pin">
-        <div class="pin">Sensor VCC</div>
+        <div class="pin">VCC (Red)</div>
         <div class="arrow">↓</div>
-        <div class="dest">3.3V (NodeMCU)</div>
+        <div class="dest">3V3 (ESP32)</div>
       </div>
       <div class="wire-pin">
-        <div class="pin">Sensor GND</div>
+        <div class="pin">GND (Black)</div>
         <div class="arrow">↓</div>
-        <div class="dest">GND (NodeMCU)</div>
+        <div class="dest">GND (ESP32)</div>
       </div>
       <div class="wire-pin">
-        <div class="pin">Sensor AOUT</div>
+        <div class="pin">AOUT (Yellow)</div>
         <div class="arrow">↓</div>
-        <div class="dest">A0 (NodeMCU)</div>
+        <div class="dest">GPIO34 (ESP32)</div>
       </div>
     </div>
 
-    <div class="alert alert-warn" style="margin-top:16px">
-      <span class="alert-icon">⚠️</span>
-      <span>NodeMCU's A0 pin only accepts <strong>0–1V</strong>. Most sensors output 0–3.3V — if your sensor outputs 3.3V, use a <strong>voltage divider</strong> (10kΩ + 33kΩ resistors) between AOUT and A0.</span>
+    <h4 style="margin-top:20px">DHT11 Temperature & Humidity Sensor (3-pin)</h4>
+    <p>Pins ordered left to right (flat side facing you).</p>
+    <div class="wiring">
+      <div class="wire-pin">
+        <div class="pin">VCC (Red)</div>
+        <div class="arrow">↓</div>
+        <div class="dest">VIN / 5V (ESP32)</div>
+      </div>
+      <div class="wire-pin">
+        <div class="pin">DATA (Green)</div>
+        <div class="arrow">↓</div>
+        <div class="dest">GPIO4 (ESP32)</div>
+      </div>
+      <div class="wire-pin">
+        <div class="pin">GND (Black)</div>
+        <div class="arrow">↓</div>
+        <div class="dest">GND (ESP32)</div>
+      </div>
     </div>
 
-    <div class="card" style="margin-top:16px">
-      <div class="card-title">📐 Voltage Divider (if needed)</div>
-      <div class="code-block" style="margin:0">
-        <pre>Sensor AOUT ──── 10kΩ ──── A0 (NodeMCU)
-                    │
-                   33kΩ
-                    │
-                   GND
-
-<span class="c-muted">Output = 3.3V × (33kΩ / (10kΩ + 33kΩ)) = 3.3V × 0.77 = ~2.5V
-→ Actually still above 1V limit! Use 33kΩ + 100kΩ for ~2.5V sensor.</span>
-
-<span class="c-muted">Safest option: Use sensors specifically rated for NodeMCU (3.3V with A0-safe output).</span></pre>
+    <h4 style="margin-top:20px">External LED</h4>
+    <p><strong>Longer leg = +</strong>, shorter = -. Connect via 220Ω resistor.</p>
+    <div class="wiring">
+      <div class="wire-pin">
+        <div class="pin">LED + (Long leg)</div>
+        <div class="arrow">↓</div>
+        <div class="dest">GPIO26 (via 220Ω)</div>
       </div>
+      <div class="wire-pin">
+        <div class="pin">LED − (Short leg)</div>
+        <div class="arrow">↓</div>
+        <div class="dest">GND (ESP32)</div>
+      </div>
+      <div class="wire-pin" style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;text-align:center">
+        <div class="pin">220Ω Resistor</div>
+        <div class="arrow">—</div>
+        <div class="dest" style="color:var(--purple)">In series with LED+</div>
+      </div>
+    </div>
+
+    <h4 style="margin-top:20px">Active Buzzer (2-pin)</h4>
+    <p><strong>Longer leg = +</strong>, shorter = −.</p>
+    <div class="wiring">
+      <div class="wire-pin">
+        <div class="pin">Buzzer + (Long)</div>
+        <div class="arrow">↓</div>
+        <div class="dest">GPIO15 (ESP32)</div>
+      </div>
+      <div class="wire-pin">
+        <div class="pin">Buzzer − (Short)</div>
+        <div class="arrow">↓</div>
+        <div class="dest">GND (ESP32)</div>
+      </div>
+    </div>
+
+    <h4 style="margin-top:20px">ESP32 Pin Summary</h4>
+    <table>
+      <tr><th>ESP32 Pin</th><th>Connected To</th></tr>
+      <tr><td>3V3</td><td>Soil Sensor VCC</td></tr>
+      <tr><td>VIN (5V)</td><td>DHT11 VCC</td></tr>
+      <tr><td>GND</td><td>All 4 black ground wires (twisted together)</td></tr>
+      <tr><td>GPIO34</td><td>Soil Sensor AOUT (Yellow)</td></tr>
+      <tr><td>GPIO4</td><td>DHT11 DATA (Green)</td></tr>
+      <tr><td>GPIO26</td><td>LED+ (via 220Ω resistor)</td></tr>
+      <tr><td>GPIO15</td><td>Buzzer+</td></tr>
+    </table>
+
+    <div class="alert alert-tip">
+      <span class="alert-icon">💡</span>
+      <span>Tip: Use multiple GND pins on ESP32 or twist all ground wires together. The LED blinks/buzzer beeps when soil moisture drops below 30%.</span>
     </div>
   </div>
 
@@ -593,7 +640,7 @@
 
     <div class="code-block">
       <div class="code-header"><span class="code-lang">url</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
-      <pre>https://arduino.esp8266.com/stable/package_esp8266com_index.json</pre>
+      <pre>https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json</pre>
     </div>
 
     <div class="steps" style="margin-top:12px">
@@ -601,7 +648,7 @@
         <span class="step-icon">🔧</span>
         <div class="step-content">
           <h4>Install ESP8266 Board</h4>
-          <p>Tools → Board → Boards Manager → Search <code>esp8266</code> → Install <strong>"esp8266 by ESP8266 Community"</strong></p>
+          <p>Tools → Board → Boards Manager → Search <code>esp32</code> → Install <strong>"esp32 by Espressif Systems"</strong></p>
         </div>
       </div>
       <div class="step-item">
@@ -615,9 +662,10 @@
 
     <table>
       <tr><th>Library</th><th>Author</th><th>Purpose</th></tr>
-      <tr><td><code>Firebase ESP8266 Client</code></td><td>Mobizt</td><td>Send data to Firebase RTDB</td></tr>
-      <tr><td><code>NTPClient</code></td><td>Fabrice Weinberg</td><td>Get current date/time from internet</td></tr>
-      <tr><td><code>ArduinoJson</code></td><td>Benoit Blanchon</td><td>JSON data formatting</td></tr>
+      <tr><td><code>Firebase ESP32 Client</code></td><td>Mobizt</td><td>Send data to Firebase RTDB</td></tr>
+      <tr><td><code>DHT sensor library</code></td><td>Adafruit</td><td>Read DHT11 temperature/humidity</td></tr>
+      <tr><td><code>Adafruit Unified Sensor</code></td><td>Adafruit</td><td>Required by DHT library</td></tr>
+      <tr><td><code>NTPClient</code></td><td>Fabrice Weinberg</td><td>Get date/time from internet</td></tr>
     </table>
 
     <div class="steps" style="margin-top:12px">
@@ -625,7 +673,7 @@
         <span class="step-icon">⚙️</span>
         <div class="step-content">
           <h4>Board Settings (Tools Menu)</h4>
-          <p>Board: <code>NodeMCU 1.0 (ESP-12E Module)</code> · Upload Speed: <code>115200</code> · Flash Size: <code>4MB (FS:2MB OTA:~1019KB)</code> · Port: <code>COM3</code> or <code>/dev/ttyUSB0</code></p>
+          <p>Board: <code>ESP32 Dev Module</code> · Upload Speed: <code>115200</code> · Flash Size: <code>4MB (FS:2MB OTA:~1019KB)</code> · Port: <code>COM3</code> or <code>/dev/ttyUSB0</code></p>
         </div>
       </div>
     </div>
@@ -636,47 +684,61 @@
     <div class="section-header">
       <div class="section-num">8</div>
       <div>
-        <div class="section-title">NodeMCU Firmware Code</div>
+        <div class="section-title">ESP32 Firmware Code</div>
         <div class="section-sub">nodemcu/soil_monitor.ino — complete code</div>
       </div>
     </div>
 
     <div class="code-block">
       <div class="code-header">
-        <span class="code-lang">c++ — nodemcu/soil_monitor.ino</span>
+        <span class="code-lang">c++ — esp32/soil_monitor.ino</span>
         <button class="copy-btn" onclick="copyCode(this)">Copy</button>
       </div>
       <pre><span class="c-muted">/*
- * SoilSense IoT — NodeMCU ESP8266 Firmware
- * Reads soil moisture sensor → sends to Firebase Realtime Database
- * with timestamp every 5 seconds.
+ * SoilSense Pro — ESP32 Firmware v2.3
+ * Reads soil moisture + DHT11 → Firebase RTDB every 5s
+ * Hardware: ESP32 Dev + Capacitive Soil Sensor + DHT11 + LED + Buzzer
  *
- * Libraries: FirebaseESP8266, NTPClient, ArduinoJson
+ * Libraries: FirebaseESP32 (Mobizt), DHT (Adafruit), NTPClient
+ *
+ * ESP32 Pin Map:
+ *   GPIO34 — Soil Sensor AOUT
+ *   GPIO4  — DHT11 DATA
+ *   GPIO26 — LED (via 220Ω resistor)
+ *   GPIO15 — Active Buzzer
  */</span>
 
-<span class="c-blue">#include</span> <span class="c-green">&lt;ESP8266WiFi.h&gt;</span>
-<span class="c-blue">#include</span> <span class="c-green">&lt;FirebaseESP8266.h&gt;</span>
+<span class="c-blue">#include</span> <span class="c-green">&lt;WiFi.h&gt;</span>
+<span class="c-blue">#include</span> <span class="c-green">&lt;FirebaseESP32.h&gt;</span>
+<span class="c-blue">#include</span> <span class="c-green">&lt;DHT.h&gt;</span>
 <span class="c-blue">#include</span> <span class="c-green">&lt;NTPClient.h&gt;</span>
 <span class="c-blue">#include</span> <span class="c-green">&lt;WiFiUdp.h&gt;</span>
-<span class="c-blue">#include</span> <span class="c-green">&lt;ArduinoJson.h&gt;</span>
 
 <span class="c-muted">// ── CONFIGURATION — Edit these values ──────────────────────────────</span>
 <span class="c-blue">#define</span> WIFI_SSID      <span class="c-amber">"YOUR_WIFI_SSID"</span>
 <span class="c-blue">#define</span> WIFI_PASSWORD  <span class="c-amber">"YOUR_WIFI_PASSWORD"</span>
 
-<span class="c-blue">#define</span> FIREBASE_HOST  <span class="c-amber">"soilsense-iot-default-rtdb.firebaseio.com"</span>  <span class="c-muted">// without https://</span>
-<span class="c-blue">#define</span> FIREBASE_AUTH  <span class="c-amber">"YOUR_DATABASE_SECRET_KEY"</span>                     <span class="c-muted">// from Project Settings</span>
+<span class="c-blue">#define</span> FIREBASE_HOST <span class="c-amber">"soilsense-iot-d1c31-default-rtdb.firebaseio.com"</span>
+<span class="c-blue">#define</span> FIREBASE_AUTH <span class="c-amber">"YOUR_DATABASE_SECRET"</span>
 
-<span class="c-blue">#define</span> SENSOR_PIN     A0        <span class="c-muted">// Analog pin (only A0 on NodeMCU)</span>
-<span class="c-blue">#define</span> SEND_INTERVAL  5000      <span class="c-muted">// ms between readings (5 seconds)</span>
-<span class="c-blue">#define</span> IST_OFFSET     19800    <span class="c-muted">// UTC+5:30 for India (seconds)</span>
-<span class="c-muted">// ──────────────────────────────────────────────────────────────────</span>
+<span class="c-blue">#define</span> SOIL_ADC_PIN  <span class="c-amber">34</span>   <span class="c-muted">// GPIO34 — Soil sensor AOUT</span>
+<span class="c-blue">#define</span> DHT_PIN       <span class="c-amber">4</span>    <span class="c-muted">// GPIO4  — DHT11 DATA</span>
+<span class="c-blue">#define</span> LED_PIN       <span class="c-amber">26</span>   <span class="c-muted">// GPIO26 — LED (via 220Ω)</span>
+<span class="c-blue">#define</span> BUZZER_PIN    <span class="c-amber">15</span>   <span class="c-muted">// GPIO15 — Active Buzzer</span>
+
+<span class="c-muted">// ── Calibration (adjust for your sensor) ────────────────────────</span>
+<span class="c-blue">#define</span> DRY_VALUE     <span class="c-amber">4095</span>  <span class="c-muted">// ADC when sensor is in dry air</span>
+<span class="c-blue">#define</span> WET_VALUE     <span class="c-amber">1800</span>  <span class="c-muted">// ADC when sensor is in water</span>
+<span class="c-blue">#define</span> DRY_THRESHOLD <span class="c-amber">30</span>    <span class="c-muted">// % moisture below which LED+buzzer alert</span>
+<span class="c-blue">#define</span> SEND_INTERVAL  <span class="c-amber">5000</span>  <span class="c-muted">// ms between readings</span>
+<span class="c-blue">#define</span> IST_OFFSET     <span class="c-amber">19800</span> <span class="c-muted">// UTC+5:30 for India (seconds)</span>
 
 FirebaseData   fbData;
 FirebaseConfig fbConfig;
 FirebaseAuth   fbAuth;
 
-WiFiUDP   ntpUDP;
+DHT            dht(DHT_PIN, DHT11);
+WiFiUDP        ntpUDP;
 NTPClient timeClient(ntpUDP, <span class="c-amber">"pool.ntp.org"</span>, IST_OFFSET, 60000);
 
 <span class="c-purple">unsigned long</span> lastSendTime = <span class="c-amber">0</span>;
@@ -688,91 +750,118 @@ NTPClient timeClient(ntpUDP, <span class="c-amber">"pool.ntp.org"</span>, IST_OF
   <span class="c-purple">while</span> (WiFi.status() != WL_CONNECTED) {
     delay(<span class="c-amber">500</span>); Serial.print(<span class="c-amber">"."</span>);
   }
-  Serial.println(<span class="c-amber">"\n✅ WiFi Connected!"</span>);
-  Serial.print(<span class="c-amber">"IP Address: "</span>);
-  Serial.println(WiFi.localIP());
+  Serial.println(<span class="c-amber">"\n[WiFi] Connected — IP: "</span> + WiFi.localIP().toString());
 }
 
-<span class="c-green">String</span> <span class="c-blue">getISOTimestamp</span>() {
-  timeClient.update();
-  time_t epochTime = timeClient.getEpochTime();
-  <span class="c-purple">struct</span> tm *ptm = gmtime(&amp;epochTime);
-
-  <span class="c-purple">char</span> buf[25];
-  snprintf(buf, <span class="c-purple">sizeof</span>(buf),
-    <span class="c-amber">"%04d-%02d-%02dT%02d:%02d:%02d"</span>,
-    ptm-&gt;tm_year + <span class="c-amber">1900</span>,
-    ptm-&gt;tm_mon  + <span class="c-amber">1</span>,
-    ptm-&gt;tm_mday,
-    ptm-&gt;tm_hour,
-    ptm-&gt;tm_min,
-    ptm-&gt;tm_sec
-  );
-  <span class="c-purple">return</span> String(buf);
+<span class="c-green">float</span> <span class="c-blue">computeHeatIndex</span>(<span class="c-purple">float</span> t, <span class="c-purple">float</span> h) {
+  <span class="c-purple">float</span> hi = t * <span class="c-amber">1.8</span> + <span class="c-amber">32</span>;
+  hi += h * <span class="c-amber">0.05</span>;
+  <span class="c-purple">return</span> (hi - <span class="c-amber">32</span>) * <span class="c-amber">0.555</span>;
 }
 
-<span class="c-green">float</span> <span class="c-blue">readMoisture</span>() {
-  <span class="c-muted">// Average 5 readings to reduce noise</span>
-  <span class="c-purple">int</span> total = <span class="c-amber">0</span>;
-  <span class="c-purple">for</span> (<span class="c-purple">int</span> i = <span class="c-amber">0</span>; i &lt; <span class="c-amber">5</span>; i++) {
-    total += analogRead(SENSOR_PIN);
-    delay(<span class="c-amber">10</span>);
+<span class="c-green">void</span> <span class="c-blue">sendToFirebase</span>(<span class="c-purple">float</span> moisture, <span class="c-purple">int</span> rawADC,
+                       <span class="c-purple">float</span> temp, <span class="c-purple">float</span> hum,
+                       <span class="c-purple">float</span> heatIdx, <span class="c-purple">bool</span> alert,
+                       String timestamp, <span class="c-purple">long</span> epoch) {
+  String path = <span class="c-amber">"/sensor/moisture/"</span> + String(epoch);
+  FirebaseJson jsonData;
+  jsonData.set(<span class="c-amber">"value"</span>,       moisture);
+  jsonData.set(<span class="c-amber">"raw"</span>,         rawADC);
+  jsonData.set(<span class="c-amber">"temperature"</span>, temp);
+  jsonData.set(<span class="c-amber">"humidity"</span>,    hum);
+  jsonData.set(<span class="c-amber">"heat_index"</span>,  heatIdx);
+  jsonData.set(<span class="c-amber">"alert"</span>,       alert);
+  jsonData.set(<span class="c-amber">"timestamp"</span>,  timestamp);
+
+  <span class="c-purple">if</span> (Firebase.setJSON(fbData, path, jsonData)) {
+    Serial.printf(<span class="c-amber">"[%d] OK | Soil:%.1f%% | Temp:%.1fC | Hum:%.1f%%\n"</span>,
+                  readingCount, moisture, temp, hum);
+  } <span class="c-purple">else</span> {
+    Serial.print(<span class="c-amber">"[Firebase] Error: "</span>); Serial.println(fbData.errorReason());
   }
-  <span class="c-purple">int</span> raw = total / <span class="c-amber">5</span>;
+}
 
-  <span class="c-muted">// Map: dry soil = ~800 ADC = 0%, wet soil = ~300 ADC = 100%
-  // Adjust these calibration values for YOUR sensor!</span>
-  <span class="c-purple">const int</span> DRY_VAL = <span class="c-amber">800</span>;
-  <span class="c-purple">const int</span> WET_VAL = <span class="c-amber">300</span>;
-  <span class="c-purple">float</span> moisture = map(raw, DRY_VAL, WET_VAL, <span class="c-amber">0</span>, <span class="c-amber">100</span>);
-  <span class="c-purple">return</span> constrain(moisture, <span class="c-amber">0.0</span>, <span class="c-amber">100.0</span>);
+<span class="c-green">void</span> <span class="c-blue">blinkLED</span>(<span class="c-purple">int</span> times, <span class="c-purple">int</span> delayMs) {
+  <span class="c-purple">for</span> (<span class="c-purple">int</span> i = <span class="c-amber">0</span>; i &lt; times; i++) {
+    digitalWrite(LED_PIN, HIGH);
+    <span class="c-purple">if</span> (times == <span class="c-amber">1</span>) digitalWrite(BUZZER_PIN, HIGH);
+    delay(delayMs);
+    digitalWrite(LED_PIN, LOW);
+    digitalWrite(BUZZER_PIN, LOW);
+    delay(delayMs);
+  }
 }
 
 <span class="c-green">void</span> <span class="c-blue">setup</span>() {
   Serial.begin(<span class="c-amber">115200</span>);
-  Serial.println(<span class="c-amber">"\n\n🌱 SoilSense IoT Starting..."</span>);
+  Serial.println(<span class="c-amber">"\n🌱 SoilSense Pro — ESP32 Firmware v2.3"</span>);
+
+  pinMode(SOIL_ADC_PIN, INPUT);
+  pinMode(LED_PIN, OUTPUT);
+  pinMode(BUZZER_PIN, OUTPUT);
+  digitalWrite(LED_PIN, LOW);
+  digitalWrite(BUZZER_PIN, LOW);
+
+  blinkLED(<span class="c-amber">3</span>, <span class="c-amber">200</span>);
+  blinkLED(<span class="c-amber">2</span>, <span class="c-amber">100</span>);
+
+  dht.begin();
+  Serial.println(<span class="c-amber">"[DHT] DHT11 initialized on GPIO4"</span>);
 
   connectWiFi();
 
-  <span class="c-muted">// Firebase config</span>
   fbConfig.host = FIREBASE_HOST;
   fbConfig.signer.tokens.legacy_token = FIREBASE_AUTH;
   Firebase.begin(&amp;fbConfig, &amp;fbAuth);
   Firebase.reconnectWiFi(<span class="c-amber">true</span>);
-  fbData.setResponseSize(<span class="c-amber">4096</span>);
 
-  <span class="c-muted">// NTP time</span>
   timeClient.begin();
   timeClient.update();
-  Serial.println(<span class="c-amber">"✅ Firebase + NTP Ready!"</span>);
+
+  Serial.println(<span class="c-amber">"[Ready] Sending data every 5s..."</span>);
 }
 
 <span class="c-green">void</span> <span class="c-blue">loop</span>() {
   <span class="c-purple">if</span> (millis() - lastSendTime &gt;= SEND_INTERVAL) {
     lastSendTime = millis();
+    readingCount++;
 
-    <span class="c-purple">float</span>  moisture  = readMoisture();
-    <span class="c-purple">int</span>    raw       = analogRead(SENSOR_PIN);
-    String timestamp = getISOTimestamp();
-    <span class="c-purple">long</span>   epoch     = timeClient.getEpochTime();
+    <span class="c-muted">// ── Soil Moisture ──</span>
+    <span class="c-purple">int</span> rawADC = analogRead(SOIL_ADC_PIN);
+    <span class="c-purple">float</span> moisture = map(rawADC, DRY_VALUE, WET_VALUE, <span class="c-amber">0</span>, <span class="c-amber">100</span>);
+    moisture = constrain(moisture, <span class="c-amber">0.0</span>, <span class="c-amber">100.0</span>);
+    <span class="c-purple">bool</span> dryAlert = (moisture &lt; DRY_THRESHOLD);
 
-    <span class="c-muted">// Path: /sensor/moisture/{epochTimestamp}</span>
-    String path = <span class="c-amber">"/sensor/moisture/"</span> + String(epoch);
+    <span class="c-muted">// ── DHT11 ──</span>
+    <span class="c-purple">float</span> temp = dht.readTemperature();
+    <span class="c-purple">float</span> hum  = dht.readHumidity();
+    <span class="c-purple">float</span> heatIdx = computeHeatIndex((isnan(temp) ? <span class="c-amber">0</span> : temp),
+                                          (isnan(hum)  ? <span class="c-amber">0</span> : hum));
+    <span class="c-purple">if</span> (isnan(temp)) { temp = <span class="c-amber">0</span>; hum = <span class="c-amber">0</span>; }
 
-    <span class="c-muted">// Write as JSON object using FirebaseJson</span>
-    FirebaseJson jsonData;
-    jsonData.set(<span class="c-amber">"value"</span>,     moisture);
-    jsonData.set(<span class="c-amber">"raw"</span>,       raw);
-    jsonData.set(<span class="c-amber">"timestamp"</span>, timestamp);
-
-    <span class="c-purple">if</span> (Firebase.setJSON(fbData, path, jsonData)) {
-      readingCount++;
-      Serial.printf(<span class="c-amber">"✅ [%d] Sent → %.1f%% (raw:%d) @ %s\n"</span>,
-        readingCount, moisture, raw, timestamp.c_str());
+    <span class="c-muted">// ── LED + Buzzer alerts ──</span>
+    <span class="c-purple">if</span> (dryAlert) {
+      blinkLED(<span class="c-amber">3</span>, <span class="c-amber">150</span>);
+      digitalWrite(LED_PIN, HIGH);
+      blinkLED(<span class="c-amber">3</span>, <span class="c-amber">100</span>);
+      digitalWrite(LED_PIN, LOW);
     } <span class="c-purple">else</span> {
-      Serial.print(<span class="c-amber">"❌ Firebase error: "</span>);
-      Serial.println(fbData.errorReason());
+      digitalWrite(LED_PIN, LOW);
+      digitalWrite(BUZZER_PIN, LOW);
     }
+
+    <span class="c-muted">// ── Timestamp ──</span>
+    timeClient.update();
+    <span class="c-purple">long</span>   epoch    = timeClient.getEpochTime();
+    time_t   rawTime = epoch;
+    <span class="c-purple">struct</span> tm *ptm  = localtime(&amp;rawTime);
+    <span class="c-purple">char</span>   buf[32];
+    snprintf(buf, <span class="c-amber">sizeof</span>(buf), <span class="c-amber">"%04d-%02d-%02dT%02d:%02d:%02d"</span>,
+             ptm-&gt;tm_year + <span class="c-amber">1900</span>, ptm-&gt;tm_mon + <span class="c-amber">1</span>, ptm-&gt;tm_mday,
+             ptm-&gt;tm_hour, ptm-&gt;tm_min, ptm-&gt;tm_sec);
+    String timestamp = String(buf);
+
+    sendToFirebase(moisture, rawADC, temp, hum, heatIdx, dryAlert, timestamp, epoch);
   }
 }</pre>
     </div>
@@ -788,91 +877,35 @@ NTPClient timeClient(ntpUDP, <span class="c-amber">"pool.ntp.org"</span>, IST_OF
     <div class="section-header">
       <div class="section-num">9</div>
       <div>
-        <div class="section-title">Dashboard Files</div>
-        <div class="section-sub">dashboard/index.html + app.js</div>
+        <div class="section-title">Live Dashboard</div>
+        <div class="section-sub">soil-monitor-dashboard.html — single-file dashboard</div>
       </div>
     </div>
 
     <h3>dashboard/index.html — head section</h3>
     <div class="code-block">
       <div class="code-header"><span class="code-lang">html — dashboard/index.html (head)</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
-      <pre><span class="c-muted">&lt;!-- Load Firebase SDK --&gt;</span>
+      <pre><span class="c-muted">&lt;!-- Firebase SDK (compat) + Chart.js + EmailJS --&gt;</span>
 <span class="c-blue">&lt;script</span> src=<span class="c-green">"https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"</span><span class="c-blue">&gt;&lt;/script&gt;</span>
 <span class="c-blue">&lt;script</span> src=<span class="c-green">"https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"</span><span class="c-blue">&gt;&lt;/script&gt;</span>
-
-<span class="c-muted">&lt;!-- Chart.js for graphs --&gt;</span>
+<span class="c-blue">&lt;script</span> src=<span class="c-green">"https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"</span><span class="c-blue">&gt;&lt;/script&gt;</span>
 <span class="c-blue">&lt;script</span> src=<span class="c-green">"https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"</span><span class="c-blue">&gt;&lt;/script&gt;</span>
-
-<span class="c-muted">&lt;!-- Your Firebase config (always load BEFORE app.js) --&gt;</span>
-<span class="c-blue">&lt;script</span> src=<span class="c-green">"firebase-config.js"</span><span class="c-blue">&gt;&lt;/script&gt;</span>
-
-<span class="c-muted">&lt;!-- Dashboard app --&gt;</span>
-<span class="c-blue">&lt;script</span> src=<span class="c-green">"app.js"</span> defer<span class="c-blue">&gt;&lt;/script&gt;</span></pre>
+<span class="c-blue">&lt;script</span> src=<span class="c-green">"https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"</span><span class="c-blue">&gt;&lt;/script&gt;</span>
+<span class="c-muted">&lt;!-- Dashboard is self-contained — all JS embedded in the HTML --&gt;</span></pre>
     </div>
 
-    <h3>dashboard/app.js — Firebase connection</h3>
-    <div class="code-block">
-      <div class="code-header"><span class="code-lang">javascript — dashboard/app.js</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
-      <pre><span class="c-muted">// dashboard/app.js
-// Connects to Firebase and drives the dashboard UI</span>
+    <h3>EmailJS Setup (for alerts)</h3>
+    <table>
+      <tr><th>Config</th><th>Value</th></tr>
+      <tr><td>Service ID</td><td><code>service_rj3sq3y</code></td></tr>
+      <tr><td>Template ID</td><td><code>template_z90i26a</code></td></tr>
+      <tr><td>Public Key</td><td><code>qPr-jzIwW1BHiFvsS</code></td></tr>
+    </table>
+    <p>Register at <strong>emailjs.com</strong> → connect your Gmail → create the service and template with parameters: <code>to_email</code>, <code>soil_pct</code>, <code>temperature</code>, <code>humidity</code>, <code>status</code>, <code>time</code>.</p>
 
-<span class="c-muted">// ── Init Firebase ──────────────────────────────────────────────────</span>
-<span class="c-purple">const</span> app = firebase.initializeApp(firebaseConfig);  <span class="c-muted">// from firebase-config.js</span>
-<span class="c-purple">const</span> db  = firebase.database();
-
-<span class="c-muted">// ── Real-Time Listener ─────────────────────────────────────────────</span>
-<span class="c-muted">// Fires every time a NEW reading is added by NodeMCU</span>
-db.ref(DB_PATH).limitToLast(<span class="c-amber">1</span>).on(<span class="c-green">'child_added'</span>, (snapshot) => {
-  <span class="c-purple">const</span> data = snapshot.val();
-  <span class="c-purple">if</span> (data &amp;&amp; data.value !== undefined) {
-    updateDashboard(data.value, data.raw, data.timestamp);
-  }
-});
-
-<span class="c-muted">// ── Load Last 20 Readings on Page Load ────────────────────────────</span>
-db.ref(DB_PATH).limitToLast(<span class="c-amber">20</span>).once(<span class="c-green">'value'</span>, (snapshot) => {
-  <span class="c-purple">const</span> entries = [];
-  snapshot.forEach(child => entries.push(child.val()));
-
-  <span class="c-muted">// Oldest → newest order for chart</span>
-  entries.reverse().forEach(d => {
-    <span class="c-purple">if</span> (d &amp;&amp; d.value !== undefined)
-      pushToChart(d.value, d.timestamp);
-  });
-  realtimeChart.update();
-  console.log(<span class="c-green">`✅ Loaded ${entries.length} historical readings`</span>);
-});
-
-<span class="c-muted">// ── updateDashboard(value, raw, timestamp) ─────────────────────────</span>
-<span class="c-green">function</span> <span class="c-blue">updateDashboard</span>(value, raw, timestamp) {
-  <span class="c-purple">const</span> ts      = timestamp ? <span class="c-purple">new</span> Date(timestamp) : <span class="c-purple">new</span> Date();
-  <span class="c-purple">const</span> timeStr = ts.toLocaleTimeString(<span class="c-amber">'en-IN'</span>, { hour12: <span class="c-amber">false</span> });
-  <span class="c-purple">const</span> pct     = parseFloat(value).toFixed(<span class="c-amber">1</span>);
-
-  <span class="c-muted">// Update DOM elements</span>
-  document.getElementById(<span class="c-amber">'moistureValue'</span>).textContent = pct;
-  document.getElementById(<span class="c-amber">'rawValue'</span>).textContent      = raw || <span class="c-amber">'--'</span>;
-  document.getElementById(<span class="c-amber">'lastTime'</span>).textContent       = timeStr;
-
-  <span class="c-muted">// Status badge</span>
-  <span class="c-purple">const</span> status = getStatus(value);
-  document.getElementById(<span class="c-amber">'statusBadge'</span>).textContent   = status.label;
-  document.getElementById(<span class="c-amber">'statusBadge'</span>).className    = <span class="c-green">`badge badge-${status.cls}`</span>;
-
-  <span class="c-muted">// Push to real-time chart</span>
-  pushToChart(value, timestamp);
-  realtimeChart.update();
-
-  <span class="c-muted">// Alert if dry</span>
-  <span class="c-purple">if</span> (value &lt; <span class="c-amber">30</span>) triggerAlert(value);
-}
-
-<span class="c-green">function</span> <span class="c-blue">getStatus</span>(v) {
-  <span class="c-purple">if</span> (v &lt; <span class="c-amber">20</span>) <span class="c-purple">return</span> { label: <span class="c-amber">'🔴 Critical Dry'</span>,   cls: <span class="c-amber">'critical'</span> };
-  <span class="c-purple">if</span> (v &lt; <span class="c-amber">40</span>) <span class="c-purple">return</span> { label: <span class="c-amber">'🟡 Dry'</span>,           cls: <span class="c-amber">'dry'</span>      };
-  <span class="c-purple">if</span> (v &lt; <span class="c-amber">70</span>) <span class="c-purple">return</span> { label: <span class="c-amber">'🟢 Optimal'</span>,      cls: <span class="c-amber">'ok'</span>       };
-  <span class="c-purple">return</span>           { label: <span class="c-amber">'🔵 Wet'</span>,           cls: <span class="c-amber">'wet'</span>      };
-}</pre>
+    <div class="alert alert-tip">
+      <span class="alert-icon">💡</span>
+      <span><strong>Authentication:</strong> The dashboard uses Firebase Email/Password auth. Create your account at first use (toggle "Create account"). Alternatively enable Anonymous auth in Firebase Console for quick testing.</span>
     </div>
   </div>
 
@@ -942,7 +975,7 @@ db.ref(DB_PATH).limitToLast(<span class="c-amber">20</span>).once(<span class="c
         <td>Set to <code>115200</code></td>
       </tr>
       <tr>
-        <td>NodeMCU not detected (COM port missing)</td>
+        <td>ESP32 not detected (COM port missing)</td>
         <td>Missing USB driver</td>
         <td>Install CP2102 or CH340 driver for your OS</td>
       </tr>
@@ -962,7 +995,7 @@ db.ref(DB_PATH).limitToLast(<span class="c-amber">20</span>).once(<span class="c
         <td>Open browser DevTools → Console for error; check DB_PATH matches Firebase</td>
       </tr>
       <tr>
-        <td>NodeMCU keeps restarting (crash loop)</td>
+        <td>ESP32 keeps restarting (crash loop)</td>
         <td>Insufficient power</td>
         <td>Use a good USB cable + 5V 1A adapter, not laptop USB</td>
       </tr>
