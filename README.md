@@ -291,6 +291,10 @@
 ![Sensor Calibration](images/sensor-calibration.png)
 *Raw ADC vs moisture % calibration graph*
 
+### Email Alert Settings
+![Email Configuration Page](images/emailPage.png)
+*Dashboard email alerts config (EmailJS integration)*
+
 ---
 
 **SoilSense Pro v2.9** | **ESP32 IoT Agriculture** | **Ganesh Kumbhar** | **Firebase: soilsense-iot-d1c31**
