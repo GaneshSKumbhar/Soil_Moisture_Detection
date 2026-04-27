@@ -4,7 +4,6 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>SoilSense Pro</title>
-<!-- FIX 1: Favicon added -->
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%234ade80' stroke='%2322c55e' stroke-width='1.5'/%3E%3Ctext x='16' y='22' font-family='Arial,sans-serif' font-size='18' fill='%23166334' text-anchor='middle' dominant-baseline='middle'%3E%F0%9F%8C%B1%3C/text%3E%3C/svg%3E" type="image/svg+xml">
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
@@ -17,13 +16,13 @@
   --bg:#0a0f0d;--bg2:#111a14;--card:#1a2820;--border:#2a3f30;
   --text:#e2f5e8;--muted:#6b8f72;--input-bg:#0d1a10;--shadow:rgba(0,0,0,.5);
   --green:#4ade80;--green-dim:#22c55e44;--green-glow:#4ade8022;
-  --amber:#fbbf24;--red:#f87171;--blue:#60a5fa;--orange:#fb923c;--purple:#c084fc;
+  --amber:#fbbf24;--red:#f87171;--blue:#60a5fa;--orange:#fb923c;--purple:#c084fc;--teal:#2dd4bf;
 }
 [data-theme="light"]{
   --bg:#f0f7f0;--bg2:#e4f0e4;--card:#ffffff;--border:#c8dfc8;
   --text:#1a2e1a;--muted:#5a7a5a;--input-bg:#f8fff8;--shadow:rgba(0,0,0,.1);
   --green:#16a34a;--green-dim:#16a34a22;--green-glow:#16a34a11;
-  --amber:#d97706;--red:#dc2626;--blue:#2563eb;--orange:#ea580c;--purple:#9333ea;
+  --amber:#d97706;--red:#dc2626;--blue:#2563eb;--orange:#ea580c;--purple:#9333ea;--teal:#0d9488;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;transition:background .3s,color .3s}
@@ -31,6 +30,8 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
 @keyframes slideUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.4}}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+
+/* ── LOGIN ── */
 .login-page{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:1000;animation:fadeIn .4s ease}
 .login-box{background:var(--card);border:1px solid var(--border);border-radius:24px;padding:40px;width:min(420px,92vw);box-shadow:0 20px 60px var(--shadow)}
 .ll{display:flex;align-items:center;gap:12px;margin-bottom:28px}
@@ -50,6 +51,8 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
 .ltog{text-align:center;font-size:.78rem;color:var(--muted);margin-top:14px;cursor:pointer}
 .ltog span{color:var(--green);text-decoration:underline}
 .ldiv{text-align:center;font-size:.7rem;color:var(--muted);margin:12px 0;font-family:'Space Mono',monospace}
+
+/* ── HEADER ── */
 .header{display:flex;align-items:center;justify-content:space-between;padding:14px 26px;border-bottom:1px solid var(--border);background:var(--bg);flex-wrap:wrap;gap:8px}
 .logo{display:flex;align-items:center;gap:10px}
 .logo-icon{width:34px;height:34px;background:var(--green-glow);border:1px solid var(--green);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:1rem}
@@ -68,10 +71,15 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
 .esp-chip.online{border-color:var(--green);color:var(--green);background:var(--green-dim)}
 .esp-chip.offline{border-color:var(--red);color:var(--red);background:#3b000033}
 .esp-chip.waiting{border-color:var(--amber);color:var(--amber);background:#3b1f0033}
-.main{padding:18px 26px;max-width:1400px;margin:0 auto}
+
+/* ── MAIN LAYOUT ── */
+.main{padding:18px 26px;max-width:1500px;margin:0 auto}
 .banner{padding:10px 15px;border-radius:11px;margin-bottom:14px;display:flex;align-items:center;gap:9px;font-size:.78rem;border:1px solid var(--border);background:var(--bg2)}
 .bdot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
 .dry-banner{display:none;padding:12px 18px;border-radius:12px;margin-bottom:14px;background:#3b0000;border:1px solid #600000;color:var(--red);font-size:.82rem;font-weight:600;animation:blink 1s infinite;align-items:center;gap:10px}
+.sensor-warn{display:none;padding:8px 14px;border-radius:9px;margin-bottom:10px;background:#3b1f00;border:1px solid #5a3a00;color:var(--amber);font-size:.75rem;font-family:'Space Mono',monospace;align-items:center;gap:8px}
+
+/* ── SENSOR CARDS (3 column) ── */
 .sr{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px}
 .sc{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:20px;animation:slideUp .5s ease both;position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:center}
 .sc::after{content:'';position:absolute;bottom:-40px;right:-40px;width:130px;height:130px;border-radius:50%;filter:blur(28px);pointer-events:none}
@@ -90,6 +98,8 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
 .gcc{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding-top:6px}
 .gv{font-family:'Space Mono',monospace;font-size:1.85rem;font-weight:700;line-height:1;transition:color .6s}
 .gu{font-family:'Space Mono',monospace;font-size:.6rem;color:var(--muted);margin-top:2px}
+
+/* ── STATUS BADGE COLORS ── */
 .s-wet{background:#1e3a5f;color:var(--blue);border:1px solid #2a5080}
 .s-ok{background:#14301e;color:var(--green);border:1px solid #2a6040}
 .s-dry{background:#3b1f00;color:var(--amber);border:1px solid #5a3a00}
@@ -99,6 +109,8 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
 .s-warm{background:#3b1f00;color:var(--amber);border:1px solid #5a3a00}
 .s-hot{background:#3b0000;color:var(--red);border:1px solid #600000}
 .s-nodata{background:#1a1a2e;color:var(--muted);border:1px solid #2a2a4a}
+
+/* ── AI CARD ── */
 .ai-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:18px;margin-bottom:14px;position:relative;overflow:hidden}
 .ai-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--purple),var(--blue),var(--green))}
 .ai-h{display:flex;align-items:center;gap:8px;margin-bottom:12px}
@@ -111,18 +123,38 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
 .ai-bw{flex:1;height:5px;background:var(--bg2);border-radius:3px;overflow:hidden}
 .ai-b{height:100%;background:var(--purple);border-radius:3px;transition:width .8s ease}
 .ai-cl{font-size:.62rem;font-family:'Space Mono',monospace;color:var(--muted)}
+
+/* ── STATS BAR ── */
 .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px}
 .stc{background:var(--card);border:1px solid var(--border);border-radius:13px;padding:13px 14px}
 .stl{font-size:.58rem;font-family:'Space Mono',monospace;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:4px}
 .stv{font-family:'Space Mono',monospace;font-size:1.3rem;font-weight:700}
 .sts{font-size:.6rem;color:var(--muted);margin-top:2px}
+
+/* ── CHART GRID ── */
+.charts-section-label{font-family:'Space Mono',monospace;font-size:.6rem;text-transform:uppercase;letter-spacing:.15em;color:var(--muted);margin-bottom:10px;padding:0 2px;display:flex;align-items:center;gap:8px}
+.charts-section-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* Row 1: Soil + Temp+Hum combined (original row) */
 .cr{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+/* Row 2: Temperature alone + Humidity alone */
+.cr2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+/* Row 3: Heat Index alone (wide) + Weekly bar */
+.cr3{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+
 .cc{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:18px;display:flex;flex-direction:column}
+.cc-wide{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:18px;display:flex;flex-direction:column;margin-bottom:14px}
 .ch{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
 .ct{font-family:'Space Mono',monospace;font-size:.6rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}
 .cw{flex:1;min-height:155px;position:relative}
+.cw-tall{flex:1;min-height:175px;position:relative}
+.chart-legend{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.cl-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:4px}
+.cl-item{font-family:'Space Mono',monospace;font-size:.58rem;color:var(--muted);display:flex;align-items:center}
+
+/* ── BOTTOM ROW: Alerts + Table ── */
 .br{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
-.pc{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:18px;display:flex;flex-direction:column;max-height:245px;overflow:hidden}
+.pc{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:18px;display:flex;flex-direction:column;max-height:260px;overflow:hidden}
 .sw{overflow-y:auto;flex:1;margin-top:10px}
 .sw::-webkit-scrollbar{width:3px}
 .sw::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
@@ -136,8 +168,8 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
 .ht tbody tr:hover{background:var(--bg2)}
 .badge{display:inline-block;padding:1px 5px;border-radius:20px;font-size:.54rem;font-weight:700}
 .bok{background:#14301e;color:var(--green)}.bwet{background:#1e3a5f;color:var(--blue)}.bdry{background:#3b1f00;color:var(--amber)}.bcrit{background:#3b0000;color:var(--red)}.bnodata{background:#1a1a1a;color:var(--muted)}
-.wc{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:18px;margin-bottom:14px}
-.ww{height:145px;position:relative;margin-top:10px}
+
+/* ── EMAIL SETTINGS ── */
 .ec{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:18px;margin-bottom:20px}
 .ef{display:grid;grid-template-columns:1fr 1fr auto;gap:10px;align-items:end;margin-top:12px}
 .eff label{font-size:.58rem;font-family:'Space Mono',monospace;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;display:block;margin-bottom:5px}
@@ -148,14 +180,21 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
 .es{font-size:.7rem;color:var(--muted);margin-top:8px;font-family:'Space Mono',monospace}
 .test-btn{padding:7px 12px;background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:8px;font-family:'Space Mono',monospace;font-size:.65rem;cursor:pointer;margin-top:8px;transition:all .2s}
 .test-btn:hover{border-color:var(--green);color:var(--green)}
+
+/* ── TOAST ── */
 .toast{position:fixed;top:18px;right:18px;background:var(--card);border:1px solid var(--green);border-radius:11px;padding:10px 14px;font-size:.74rem;z-index:500;animation:slideUp .3s ease;display:flex;align-items:center;gap:8px;max-width:290px;box-shadow:0 4px 20px var(--shadow)}
 .toast.error{border-color:var(--red)}.toast.warn{border-color:var(--amber)}.toast.info{border-color:var(--purple)}
-/* FIX: Sensor error warning strip */
-.sensor-warn{display:none;padding:8px 14px;border-radius:9px;margin-bottom:10px;background:#3b1f00;border:1px solid #5a3a00;color:var(--amber);font-size:.75rem;font-family:'Space Mono',monospace;align-items:center;gap:8px}
+
+/* ── CHART ZONE INDICATOR PILLS ── */
+.zone-pills{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}
+.zpill{font-size:.5rem;font-family:'Space Mono',monospace;padding:2px 7px;border-radius:10px;border:1px solid}
+
+@media(max-width:1100px){
+  .cr{grid-template-columns:1fr}.cr2{grid-template-columns:1fr}.cr3{grid-template-columns:1fr}
+}
 @media(max-width:900px){
   .main{padding:12px}.sr{grid-template-columns:1fr}
-  .stats{grid-template-columns:1fr 1fr}.cr{grid-template-columns:1fr}
-  .br{grid-template-columns:1fr}.header{padding:12px}
+  .stats{grid-template-columns:1fr 1fr}.br{grid-template-columns:1fr}.header{padding:12px}
   .ai-g{grid-template-columns:1fr 1fr}.ef{grid-template-columns:1fr}
 }
 </style>
@@ -179,7 +218,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
 <header class="header" id="mHeader" style="display:none">
   <div class="logo">
     <div class="logo-icon">🌱</div>
-    <div class="logo-text"><h1>SoilSense Pro</h1><p>soilsense-iot-d1c31 · ESP32 · v2.3</p></div>
+    <div class="logo-text"><h1>SoilSense Pro</h1><p>soilsense-iot-d1c31 · ESP32 · v3.0</p></div>
   </div>
   <div class="hr">
     <div class="lc" id="liveChip" style="display:none"><span class="ld"></span> LIVE</div>
@@ -196,11 +235,10 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
 <main class="main" id="mDash" style="display:none">
   <div class="banner" id="banner"><span class="bdot" id="bdot" style="background:var(--muted)"></span><span id="btext">Connecting...</span></div>
   <div class="dry-banner" id="dryBanner">🚨 DRY SOIL ALERT — Water your plant immediately!</div>
-
-  <!-- FIX 2 & 3: Sensor disconnection warnings -->
   <div class="sensor-warn" id="soilWarn">⚠️ Soil sensor may be disconnected — reading ~100% (ADC open circuit). Check wiring.</div>
   <div class="sensor-warn" id="tempWarn">⚠️ DHT11 sensor may be disconnected — temperature/humidity reading 0. Check wiring.</div>
 
+  <!-- SENSOR SUMMARY CARDS -->
   <div class="sr">
     <div class="sc sc1">
       <div class="scl">Soil Moisture</div>
@@ -241,6 +279,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
     </div>
   </div>
 
+  <!-- AI PREDICTION -->
   <div class="ai-card">
     <div class="ai-h">
       <span style="font-size:1.2rem">🤖</span>
@@ -260,6 +299,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
     </div>
   </div>
 
+  <!-- STATS BAR -->
   <div class="stats">
     <div class="stc"><div class="stl">Soil Now</div><div class="stv" id="sCur" style="color:var(--green)">--</div><div class="sts">% moisture</div></div>
     <div class="stc"><div class="stl">Session High</div><div class="stv" id="sHi" style="color:var(--blue)">--</div><div class="sts">% moisture</div></div>
@@ -267,17 +307,90 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
     <div class="stc"><div class="stl">Humidity</div><div class="stv" id="sHum" style="color:var(--blue)">--</div><div class="sts">% RH current</div></div>
   </div>
 
+  <!-- ═══════════ CHARTS ═══════════ -->
+  <div class="charts-section-label">📊 Live Sensor Graphs</div>
+
+  <!-- Row 1: Soil Trend + Temp & Humidity Combined -->
   <div class="cr">
     <div class="cc">
-      <div class="ch"><span class="ct">Soil Moisture Trend</span><span style="font-size:.6rem;font-family:'Space Mono',monospace;color:var(--muted)" id="sPts">0 pts</span></div>
+      <div class="ch">
+        <span class="ct">🌱 Soil Moisture Trend</span>
+        <span style="font-size:.6rem;font-family:'Space Mono',monospace;color:var(--muted)" id="sPts">0 pts</span>
+      </div>
       <div class="cw"><canvas id="soilChart"></canvas></div>
+      <div class="zone-pills" style="margin-top:8px">
+        <span class="zpill" style="color:var(--red);border-color:var(--red);background:#f8717115">0–30% Dry</span>
+        <span class="zpill" style="color:var(--amber);border-color:var(--amber);background:#fbbf2415">30–60% Moist</span>
+        <span class="zpill" style="color:var(--green);border-color:var(--green);background:#4ade8015">60–80% Optimal</span>
+        <span class="zpill" style="color:var(--blue);border-color:var(--blue);background:#60a5fa15">80%+ Wet</span>
+      </div>
     </div>
     <div class="cc">
-      <div class="ch"><span class="ct">Temperature & Humidity</span><span style="font-size:.6rem;font-family:'Space Mono',monospace;color:var(--muted)" id="tPts">0 pts</span></div>
+      <div class="ch">
+        <span class="ct">🌡️ Temperature &amp; 💧 Humidity</span>
+        <div class="chart-legend">
+          <span class="cl-item"><span class="cl-dot" style="background:var(--orange)"></span>Temp °C</span>
+          <span class="cl-item"><span class="cl-dot" style="background:var(--blue)"></span>Hum %</span>
+        </div>
+        <span style="font-size:.6rem;font-family:'Space Mono',monospace;color:var(--muted)" id="tPts">0 pts</span>
+      </div>
       <div class="cw"><canvas id="thChart"></canvas></div>
     </div>
   </div>
 
+  <!-- Row 2: Temperature Alone + Humidity Alone -->
+  <div class="cr2">
+    <div class="cc">
+      <div class="ch">
+        <span class="ct">🌡️ Temperature Trend</span>
+        <div class="chart-legend">
+          <span class="cl-item"><span class="cl-dot" style="background:var(--blue)"></span>&lt;10° Cold</span>
+          <span class="cl-item"><span class="cl-dot" style="background:var(--green)"></span>10–25° Normal</span>
+          <span class="cl-item"><span class="cl-dot" style="background:var(--amber)"></span>25–35° Warm</span>
+          <span class="cl-item"><span class="cl-dot" style="background:var(--red)"></span>&gt;35° Hot</span>
+        </div>
+        <span style="font-size:.6rem;font-family:'Space Mono',monospace;color:var(--muted)" id="tmpPts">0 pts</span>
+      </div>
+      <div class="cw-tall"><canvas id="tempChart"></canvas></div>
+    </div>
+    <div class="cc">
+      <div class="ch">
+        <span class="ct">💧 Humidity Trend</span>
+        <div class="chart-legend">
+          <span class="cl-item"><span class="cl-dot" style="background:var(--amber)"></span>&lt;30% Low</span>
+          <span class="cl-item"><span class="cl-dot" style="background:var(--green)"></span>30–60% Normal</span>
+          <span class="cl-item"><span class="cl-dot" style="background:var(--blue)"></span>&gt;60% High</span>
+        </div>
+        <span style="font-size:.6rem;font-family:'Space Mono',monospace;color:var(--muted)" id="humPts">0 pts</span>
+      </div>
+      <div class="cw-tall"><canvas id="humChart"></canvas></div>
+    </div>
+  </div>
+
+  <!-- Row 3: Heat Index + Weekly Bar -->
+  <div class="cr3">
+    <div class="cc">
+      <div class="ch">
+        <span class="ct">🔥 Heat Index Trend</span>
+        <div class="chart-legend">
+          <span class="cl-item"><span class="cl-dot" style="background:var(--green)"></span>Comfortable</span>
+          <span class="cl-item"><span class="cl-dot" style="background:var(--amber)"></span>Caution</span>
+          <span class="cl-item"><span class="cl-dot" style="background:var(--red)"></span>Danger</span>
+        </div>
+        <span style="font-size:.6rem;font-family:'Space Mono',monospace;color:var(--muted)" id="hiPts">0 pts</span>
+      </div>
+      <div class="cw-tall"><canvas id="hiChart"></canvas></div>
+    </div>
+    <div class="cc">
+      <div class="ch">
+        <span class="ct">📅 Weekly Soil Average</span>
+        <span style="font-size:.6rem;font-family:'Space Mono',monospace;color:var(--muted)">Daily avg %</span>
+      </div>
+      <div class="cw-tall"><canvas id="wkChart"></canvas></div>
+    </div>
+  </div>
+
+  <!-- ALERTS + TABLE -->
   <div class="br">
     <div class="pc">
       <div class="ch" style="margin-bottom:0"><span class="ct">Alerts</span><span style="font-size:.6rem;color:var(--muted);font-family:'Space Mono',monospace" id="aCnt">0</span></div>
@@ -287,18 +400,14 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
       <div class="ch" style="margin-bottom:0"><span class="ct">Recent Readings</span></div>
       <div class="sw">
         <table class="ht">
-          <thead><tr><th>Time</th><th>Soil</th><th>Temp</th><th>Hum</th><th>Status</th></tr></thead>
-          <tbody id="hBody"><tr><td colspan="5" style="text-align:center;color:var(--muted);padding:12px">No data yet</td></tr></tbody>
+          <thead><tr><th>Time</th><th>Soil</th><th>Temp</th><th>Hum</th><th>HI</th><th>Status</th></tr></thead>
+          <tbody id="hBody"><tr><td colspan="6" style="text-align:center;color:var(--muted);padding:12px">No data yet</td></tr></tbody>
         </table>
       </div>
     </div>
   </div>
 
-  <div class="wc">
-    <div class="ch"><span class="ct">Weekly Soil Average</span></div>
-    <div class="ww"><canvas id="wkChart"></canvas></div>
-  </div>
-
+  <!-- EMAIL SETTINGS -->
   <div class="ec">
     <div class="ch" style="margin-bottom:0">
       <span class="ct">📧 Email Alert Settings</span>
@@ -337,64 +446,31 @@ let soilHigh=null, tempMin=null, tempMax=null, tempSum=0;
 let humMin=null, humMax=null, humSum=0, sCount=0;
 let emailCfg = JSON.parse(localStorage.getItem('ss_email')||'{}');
 let isLoginMode=true, isDark=true;
-
 let lastHistoricalKey = null;
 let historicalLoadDone = false;
 let espLive = false;
 let espLastSeen = null;
 let espWatchdog = null;
 
-// ══════════════════════════════════════════════════════════
-//  SENSOR VALIDATION — THE ROOT CAUSE OF YOUR BUGS
-//
-//  BUG 1: Soil = 100% when disconnected
-//    → When no sensor is connected, the ADC pin floats to 0.
-//      Your ESP32 firmware maps raw ADC 0 → 100% moisture.
-//      FIX: Detect raw ADC near 0 (typically 0–50) or the
-//           computed value being exactly/near 100 while raw
-//           is suspiciously low, and flag it as invalid.
-//
-//  BUG 2: Temp = 0°C when disconnected
-//    → DHT11 returns 0 on read failure. Your code shows 0.
-//      FIX: Treat temperature=0 AND humidity=0 as a sensor
-//           error (DHT11 never legitimately reads 0°C + 0%RH
-//           simultaneously in any real environment).
-//
-//  We validate BEFORE updating the UI and show warnings.
-// ══════════════════════════════════════════════════════════
-
-/**
- * Returns true if the soil sensor reading looks valid.
- * Invalid = raw ADC is 0 or near-zero (open circuit / disconnected).
- * Adjust RAW_MIN threshold to match your hardware (typically 50–200 for ESP32).
- */
 function isSoilValid(raw, value) {
-  const RAW_MIN = 50; // ADC counts — below this = sensor likely disconnected
+  const RAW_MIN = 50;
   if (raw === undefined || raw === null) return false;
-  if (raw < RAW_MIN) return false;   // open circuit / not connected
+  if (raw < RAW_MIN) return false;
   return true;
 }
-
-/**
- * Returns true if the DHT11 temperature/humidity reading looks valid.
- * DHT11 returns 0,0 on a read error or when not connected.
- * A real environment will never be exactly 0°C AND 0% RH at the same time.
- */
 function isTempValid(temp, hum) {
-  if (temp === 0 && hum === 0) return false;  // classic DHT11 failure/disconnect
+  if (temp === 0 && hum === 0) return false;
   if (temp === undefined || temp === null) return false;
   if (hum === undefined || hum === null) return false;
   return true;
 }
 
 function setESPOnline() {
-  espLive = true;
-  espLastSeen = Date.now();
+  espLive = true; espLastSeen = Date.now();
   document.getElementById('espChip').className   = 'esp-chip online';
   document.getElementById('espChip').textContent = '📡 ESP32 Online';
   document.getElementById('espStatus').textContent = 'Online';
   document.getElementById('espStatus').style.color = 'var(--green)';
-
   clearTimeout(espWatchdog);
   espWatchdog = setTimeout(() => {
     espLive = false;
@@ -405,7 +481,6 @@ function setESPOnline() {
     addAlert('📡','ESP32 disconnected — no data received for 20s','warn');
   }, 20000);
 }
-
 function setESPWaiting() {
   espLive = false;
   document.getElementById('espChip').className   = 'esp-chip waiting';
@@ -435,7 +510,6 @@ function doAuth(){
   fn.then(c=>{document.getElementById('uEmail').textContent=c.user.email.split('@')[0];showDash();})
     .catch(e=>{showErr(e.message.replace('Firebase: ','').replace(/\(.*\)/,''));btn.disabled=false;btn.textContent=isLoginMode?'Sign In':'Create Account';});
 }
-
 function showErr(m){const e=document.getElementById('lErr');e.textContent=m;e.style.display='block';}
 
 function doSignOut(){
@@ -448,9 +522,7 @@ function doSignOut(){
     document.getElementById('aBtn').textContent='Sign In';
     document.getElementById('eIn').value='';
     document.getElementById('pIn').value='';
-    lastHistoricalKey = null;
-    historicalLoadDone = false;
-    espLive = false;
+    lastHistoricalKey = null; historicalLoadDone = false; espLive = false;
   });
 }
 
@@ -475,6 +547,7 @@ function toggleTheme(){
   toast('🎨',isDark?'Dark mode':'Light mode');
 }
 
+/* ─── GAUGE ─── */
 const gCtx=document.getElementById('gc').getContext('2d');
 function drawGauge(v,c){
   const cx=74,cy=81,r=57,sA=Math.PI*.75,eA=Math.PI*2.25,tA=eA-sA;
@@ -491,46 +564,228 @@ function drawGauge(v,c){
 }
 drawGauge(null,'#4ade80');
 
-function mo(min,max){
-  return{responsive:true,maintainAspectRatio:false,animation:{duration:400},
-    scales:{x:{ticks:{color:'#6b8f72',font:{family:'Space Mono',size:8},maxTicksLimit:8},grid:{color:'#1f3025'}},
-            y:{min,max,ticks:{color:'#6b8f72',font:{family:'Space Mono',size:8}},grid:{color:'#1f3025'}}},
-    plugins:{legend:{display:false},tooltip:{backgroundColor:'#1a2820',borderColor:'#2a3f30',borderWidth:1,titleColor:'#6b8f72',bodyColor:'#e2f5e8'}}};
+/* ─── CHART OPTIONS ─── */
+function mo(min,max,extraOpts={}){
+  return Object.assign({
+    responsive:true,maintainAspectRatio:false,animation:{duration:400},
+    scales:{
+      x:{ticks:{color:'#6b8f72',font:{family:'Space Mono',size:8},maxTicksLimit:8},grid:{color:'#1f3025'}},
+      y:{min,max,ticks:{color:'#6b8f72',font:{family:'Space Mono',size:8}},grid:{color:'#1f3025'}}
+    },
+    plugins:{legend:{display:false},tooltip:{backgroundColor:'#1a2820',borderColor:'#2a3f30',borderWidth:1,titleColor:'#6b8f72',bodyColor:'#e2f5e8'}}
+  }, extraOpts);
 }
 
+/* ─── CHART 1: Soil Trend ─── */
 const soilChart=new Chart(document.getElementById('soilChart').getContext('2d'),{
-  type:'line',data:{labels:[],datasets:[{data:[],borderColor:'#4ade80',backgroundColor:'rgba(74,222,128,0.07)',borderWidth:2,pointRadius:2,pointBackgroundColor:'#4ade80',fill:true,tension:.4}]},options:mo(0,100)});
+  type:'line',
+  data:{labels:[],datasets:[{
+    data:[],borderColor:'#4ade80',backgroundColor:'rgba(74,222,128,0.07)',
+    borderWidth:2,pointRadius:2,pointBackgroundColor:'#4ade80',fill:true,tension:.4
+  }]},
+  options:mo(0,100)
+});
 
+/* ─── CHART 2: Temp + Humidity combined ─── */
 const thChart=new Chart(document.getElementById('thChart').getContext('2d'),{
   type:'line',
   data:{labels:[],datasets:[
-    {label:'Temp',data:[],borderColor:'#fb923c',backgroundColor:'rgba(251,146,60,0.06)',borderWidth:2,pointRadius:2,fill:false,tension:.4,yAxisID:'y'},
-    {label:'Hum', data:[],borderColor:'#60a5fa',backgroundColor:'rgba(96,165,250,0.06)',borderWidth:2,pointRadius:2,fill:false,tension:.4,yAxisID:'y1'}
+    {label:'Temp°C',data:[],borderColor:'#fb923c',backgroundColor:'rgba(251,146,60,0.06)',borderWidth:2,pointRadius:2,fill:false,tension:.4,yAxisID:'y'},
+    {label:'Hum%', data:[],borderColor:'#60a5fa',backgroundColor:'rgba(96,165,250,0.06)',borderWidth:2,pointRadius:2,fill:false,tension:.4,yAxisID:'y1'}
   ]},
-  options:{responsive:true,maintainAspectRatio:false,animation:{duration:400},
+  options:{
+    responsive:true,maintainAspectRatio:false,animation:{duration:400},
     scales:{
       x:{ticks:{color:'#6b8f72',font:{family:'Space Mono',size:8},maxTicksLimit:8},grid:{color:'#1f3025'}},
-      y:{min:0,max:60,position:'left',ticks:{color:'#fb923c',font:{family:'Space Mono',size:8}},grid:{color:'#1f3025'}},
-      y1:{min:0,max:100,position:'right',ticks:{color:'#60a5fa',font:{family:'Space Mono',size:8}},grid:{display:false}}
+      y:{min:0,max:60,position:'left',ticks:{color:'#fb923c',font:{family:'Space Mono',size:8}},grid:{color:'#1f3025'},title:{display:true,text:'°C',color:'#fb923c',font:{family:'Space Mono',size:8}}},
+      y1:{min:0,max:100,position:'right',ticks:{color:'#60a5fa',font:{family:'Space Mono',size:8}},grid:{display:false},title:{display:true,text:'%RH',color:'#60a5fa',font:{family:'Space Mono',size:8}}}
     },
-    plugins:{legend:{display:true,labels:{color:'#6b8f72',font:{family:'Space Mono',size:9},boxWidth:10}},
-             tooltip:{backgroundColor:'#1a2820',borderColor:'#2a3f30',borderWidth:1,titleColor:'#6b8f72',bodyColor:'#e2f5e8'}}}
+    plugins:{
+      legend:{display:true,labels:{color:'#6b8f72',font:{family:'Space Mono',size:9},boxWidth:10}},
+      tooltip:{backgroundColor:'#1a2820',borderColor:'#2a3f30',borderWidth:1,titleColor:'#6b8f72',bodyColor:'#e2f5e8'}
+    }
+  }
 });
 
+/* ─── CHART 3: Temperature Alone (with zone annotation via plugin) ─── */
+const tempChart=new Chart(document.getElementById('tempChart').getContext('2d'),{
+  type:'line',
+  data:{labels:[],datasets:[{
+    label:'Temp°C',
+    data:[],
+    borderColor:'#fb923c',
+    backgroundColor:(ctx)=>{
+      const g=ctx.chart.ctx.createLinearGradient(0,0,0,ctx.chart.height);
+      g.addColorStop(0,'rgba(248,113,113,0.25)');
+      g.addColorStop(0.4,'rgba(251,191,36,0.15)');
+      g.addColorStop(0.7,'rgba(74,222,128,0.10)');
+      g.addColorStop(1,'rgba(96,165,250,0.05)');
+      return g;
+    },
+    borderWidth:2.5,pointRadius:3,pointBackgroundColor:'#fb923c',
+    pointHoverRadius:5,fill:true,tension:.4,
+    segment:{
+      borderColor:(ctx)=>{
+        const v=ctx.p1.parsed.y;
+        if(v>35)return'#f87171';
+        if(v>25)return'#fbbf24';
+        if(v>10)return'#4ade80';
+        return'#60a5fa';
+      }
+    }
+  }]},
+  options:{
+    responsive:true,maintainAspectRatio:false,animation:{duration:400},
+    scales:{
+      x:{ticks:{color:'#6b8f72',font:{family:'Space Mono',size:8},maxTicksLimit:8},grid:{color:'#1f3025'}},
+      y:{min:0,max:60,ticks:{color:'#6b8f72',font:{family:'Space Mono',size:8},callback:v=>v+'°C'},grid:{color:'#1f3025'}}
+    },
+    plugins:{
+      legend:{display:false},
+      tooltip:{
+        backgroundColor:'#1a2820',borderColor:'#fb923c',borderWidth:1,
+        titleColor:'#6b8f72',bodyColor:'#e2f5e8',
+        callbacks:{label:ctx=>`🌡️ ${ctx.parsed.y.toFixed(1)}°C`}
+      }
+    }
+  }
+});
+
+/* ─── CHART 4: Humidity Alone ─── */
+const humChart=new Chart(document.getElementById('humChart').getContext('2d'),{
+  type:'line',
+  data:{labels:[],datasets:[{
+    label:'Humidity %',
+    data:[],
+    borderColor:'#60a5fa',
+    backgroundColor:(ctx)=>{
+      const g=ctx.chart.ctx.createLinearGradient(0,0,0,ctx.chart.height);
+      g.addColorStop(0,'rgba(96,165,250,0.25)');
+      g.addColorStop(0.5,'rgba(96,165,250,0.10)');
+      g.addColorStop(1,'rgba(96,165,250,0.02)');
+      return g;
+    },
+    borderWidth:2.5,pointRadius:3,pointBackgroundColor:'#60a5fa',
+    pointHoverRadius:5,fill:true,tension:.4,
+    segment:{
+      borderColor:(ctx)=>{
+        const v=ctx.p1.parsed.y;
+        if(v>60)return'#60a5fa';
+        if(v>30)return'#4ade80';
+        return'#fbbf24';
+      }
+    }
+  }]},
+  options:{
+    responsive:true,maintainAspectRatio:false,animation:{duration:400},
+    scales:{
+      x:{ticks:{color:'#6b8f72',font:{family:'Space Mono',size:8},maxTicksLimit:8},grid:{color:'#1f3025'}},
+      y:{min:0,max:100,ticks:{color:'#6b8f72',font:{family:'Space Mono',size:8},callback:v=>v+'%'},grid:{color:'#1f3025'}}
+    },
+    plugins:{
+      legend:{display:false},
+      tooltip:{
+        backgroundColor:'#1a2820',borderColor:'#60a5fa',borderWidth:1,
+        titleColor:'#6b8f72',bodyColor:'#e2f5e8',
+        callbacks:{label:ctx=>`💧 ${ctx.parsed.y.toFixed(1)}% RH`}
+      }
+    }
+  }
+});
+
+/* ─── CHART 5: Heat Index ─── */
+const hiChart=new Chart(document.getElementById('hiChart').getContext('2d'),{
+  type:'line',
+  data:{labels:[],datasets:[{
+    label:'Heat Index°C',
+    data:[],
+    borderColor:'#c084fc',
+    backgroundColor:(ctx)=>{
+      const g=ctx.chart.ctx.createLinearGradient(0,0,0,ctx.chart.height);
+      g.addColorStop(0,'rgba(248,113,113,0.30)');
+      g.addColorStop(0.5,'rgba(192,132,252,0.15)');
+      g.addColorStop(1,'rgba(192,132,252,0.02)');
+      return g;
+    },
+    borderWidth:2.5,pointRadius:3,pointBackgroundColor:'#c084fc',
+    pointHoverRadius:5,fill:true,tension:.4,
+    segment:{
+      borderColor:(ctx)=>{
+        const v=ctx.p1.parsed.y;
+        if(v>41)return'#f87171';
+        if(v>32)return'#fbbf24';
+        return'#4ade80';
+      }
+    }
+  }]},
+  options:{
+    responsive:true,maintainAspectRatio:false,animation:{duration:400},
+    scales:{
+      x:{ticks:{color:'#6b8f72',font:{family:'Space Mono',size:8},maxTicksLimit:8},grid:{color:'#1f3025'}},
+      y:{min:0,max:60,ticks:{color:'#6b8f72',font:{family:'Space Mono',size:8},callback:v=>v+'°C'},grid:{color:'#1f3025'}}
+    },
+    plugins:{
+      legend:{display:false},
+      tooltip:{
+        backgroundColor:'#1a2820',borderColor:'#c084fc',borderWidth:1,
+        titleColor:'#6b8f72',bodyColor:'#e2f5e8',
+        callbacks:{label:ctx=>{
+          const v=ctx.parsed.y;
+          let zone='Comfortable';
+          if(v>41)zone='Extreme Danger';
+          else if(v>32)zone='Extreme Caution';
+          else if(v>27)zone='Caution';
+          return `🔥 ${v.toFixed(1)}°C · ${zone}`;
+        }}
+      }
+    }
+  }
+});
+
+/* ─── CHART 6: Weekly Bar ─── */
 const days=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
 const wkChart=new Chart(document.getElementById('wkChart').getContext('2d'),{
-  type:'bar',data:{labels:days,datasets:[{data:[0,0,0,0,0,0,0],backgroundColor:days.map((_,i)=>i===(new Date().getDay()||7)-1?'#4ade80':'#4ade8028'),borderColor:'#4ade80',borderWidth:1,borderRadius:4}]},options:mo(0,100)});
+  type:'bar',
+  data:{labels:days,datasets:[{
+    data:[0,0,0,0,0,0,0],
+    backgroundColor:days.map((_,i)=>i===(new Date().getDay()||7)-1?'#4ade80':'#4ade8028'),
+    borderColor:'#4ade80',borderWidth:1,borderRadius:5,
+    borderSkipped:false
+  }]},
+  options:{
+    ...mo(0,100),
+    plugins:{
+      legend:{display:false},
+      tooltip:{
+        backgroundColor:'#1a2820',borderColor:'#4ade80',borderWidth:1,
+        titleColor:'#6b8f72',bodyColor:'#e2f5e8',
+        callbacks:{label:ctx=>`🌱 ${ctx.parsed.y.toFixed(1)}% avg soil`}
+      }
+    }
+  }
+});
 
+/* ─── HELPER: add points to chart (capped at 30) ─── */
+function pushChart(chart, label, ...values){
+  chart.data.labels.push(label);
+  values.forEach((v,i)=>chart.data.datasets[i].data.push(v));
+  const MAX=30;
+  if(chart.data.labels.length>MAX){
+    chart.data.labels.shift();
+    chart.data.datasets.forEach(ds=>ds.data.shift());
+  }
+  chart.update();
+}
+
+/* ─── STATUS HELPERS ─── */
 function getSS(v,soilOk){
-  // FIX: If soil sensor is not connected, show "No Data" state
   if(!soilOk) return{label:'⚪ No Sensor',cls:'s-nodata',color:'#6b8f72',bc:'bnodata'};
   if(v<30)return{label:'🔴 Dry — Water Now!',cls:'s-crit',color:'#f87171',bc:'bcrit'};
-  if(v<60)return{label:'🟡 Moist',           cls:'s-dry', color:'#fbbf24',bc:'bdry'};
-  if(v<80)return{label:'🟢 Optimal',         cls:'s-ok',  color:'#4ade80',bc:'bok'};
-  return        {label:'🔵 Wet',             cls:'s-wet', color:'#60a5fa',bc:'bwet'};
+  if(v<60)return{label:'🟡 Moist',cls:'s-dry',color:'#fbbf24',bc:'bdry'};
+  if(v<80)return{label:'🟢 Optimal',cls:'s-ok',color:'#4ade80',bc:'bok'};
+  return{label:'🔵 Wet',cls:'s-wet',color:'#60a5fa',bc:'bwet'};
 }
 function getTS(t,tempOk){
-  // FIX: If temp sensor not connected, show "No Data"
   if(!tempOk) return{label:'⚪ No Sensor',cls:'s-nodata'};
   if(t<10)return{label:'🔵 Cold',cls:'s-cold'};
   if(t<25)return{label:'🟢 Normal',cls:'s-normal'};
@@ -545,6 +800,7 @@ function getHS(h,tempOk){
 }
 function setBanner(c,t){document.getElementById('bdot').style.background=c;document.getElementById('btext').textContent=t;}
 
+/* ─── AI PREDICTION ─── */
 function runAI(){
   if(readings.length<5){document.getElementById('aiUp').textContent=`Need ${5-readings.length} more...`;return;}
   const r=readings.slice(0,Math.min(20,readings.length));
@@ -592,25 +848,21 @@ function sendTestEmail(){
 }
 
 function checkEmail(soil){
-  if(!espLive) return;
-  if(!emailCfg.email) return;
+  if(!espLive||!emailCfg.email) return;
   const th=emailCfg.threshold||30;
   if(soil>=th) return;
-  const key='em_alert';
-  const now=Date.now();
+  const key='em_alert';const now=Date.now();
   if(aDebounce[key]&&now-aDebounce[key]<300000) return;
   aDebounce[key]=now;
   emailjs.send(EMAILJS_SERVICE,EMAILJS_TEMPLATE,{
-    to_email:    emailCfg.email,
-    soil_pct:    soil.toFixed(1),
-    temperature: document.getElementById('tVal').textContent,
-    humidity:    document.getElementById('hVal').textContent,
-    status:      'DRY — Immediate Watering Needed!',
-    time:        new Date().toLocaleString('en-IN')
-  }).then(()=>{
-    addAlert('📧',`Email sent → ${emailCfg.email}`,'info');
-    toast('📧',`Alert sent to ${emailCfg.email}!`,'info');
-  }).catch(e=>console.error('EmailJS:',e));
+    to_email:emailCfg.email,
+    soil_pct:soil.toFixed(1),
+    temperature:document.getElementById('tVal').textContent,
+    humidity:document.getElementById('hVal').textContent,
+    status:'DRY — Immediate Watering Needed!',
+    time:new Date().toLocaleString('en-IN')
+  }).then(()=>{addAlert('📧',`Email sent → ${emailCfg.email}`,'info');toast('📧',`Alert sent to ${emailCfg.email}!`,'info');})
+    .catch(e=>console.error('EmailJS:',e));
 }
 
 function exportCSV(){
@@ -631,6 +883,7 @@ function exportCSV(){
   toast('📥',`Exported ${readings.length} readings!`);
 }
 
+/* ─── MAIN DATA UPDATE ─── */
 function updateDash(d, fromLive){
   const rawSoil = parseFloat(d.value) || 0;
   const raw     = d.raw || 0;
@@ -641,25 +894,21 @@ function updateDash(d, fromLive){
   const timeStr = ts.toLocaleTimeString('en-IN',{hour12:false});
   const dateStr = ts.toLocaleDateString('en-IN');
 
-  // ── FIX 2 & 3: Validate sensors before using values ──
   const soilOk = isSoilValid(raw, rawSoil);
   const tempOk = isTempValid(rawTemp, rawHum);
-
-  // Use validated values or safe fallbacks
   const soil = soilOk ? rawSoil : 0;
   const temp = tempOk ? rawTemp : 0;
   const hum  = tempOk ? rawHum  : 0;
 
-  // Show/hide sensor warning banners
   document.getElementById('soilWarn').style.display = (!soilOk && fromLive) ? 'flex' : 'none';
   document.getElementById('tempWarn').style.display = (!tempOk && fromLive) ? 'flex' : 'none';
 
-  const isAl  = d.alert === true || (soilOk && soil < 30);
-  const ss    = getSS(soil, soilOk);
-  const ts2   = getTS(temp, tempOk);
-  const hs    = getHS(hum, tempOk);
+  const isAl = d.alert === true || (soilOk && soil < 30);
+  const ss   = getSS(soil, soilOk);
+  const ts2  = getTS(temp, tempOk);
+  const hs   = getHS(hum, tempOk);
 
-  // ── Gauge: show "--" and grey if no sensor ──
+  // Gauge
   if(soilOk){
     drawGauge(soil, ss.color);
     const gv=document.getElementById('sVal'); gv.textContent=soil.toFixed(1); gv.style.color=ss.color;
@@ -672,11 +921,9 @@ function updateDash(d, fromLive){
   document.getElementById('rAdc').textContent   = raw;
   document.getElementById('lRead').textContent  = timeStr;
   document.getElementById('rCount').textContent = ++sCount;
-
-  // Dry banner only on live valid data
   document.getElementById('dryBanner').style.display = (isAl && fromLive && soilOk) ? 'flex' : 'none';
 
-  // ── Temperature display ──
+  // Temperature
   if(tempOk){
     document.getElementById('tVal').textContent = temp.toFixed(1);
     document.getElementById('tVal').style.color = 'var(--orange)';
@@ -694,7 +941,7 @@ function updateDash(d, fromLive){
     tempSum+=temp;
   }
 
-  // ── Humidity display ──
+  // Humidity
   if(tempOk){
     document.getElementById('hVal').textContent = hum.toFixed(1);
     document.getElementById('hVal').style.color = 'var(--blue)';
@@ -710,7 +957,6 @@ function updateDash(d, fromLive){
     humSum+=hum;
   }
 
-  // Avg uses only valid readings count
   const validCount = readings.filter(r=>r.tempOk).length + (tempOk?1:0);
   if(validCount>0){
     document.getElementById('tAvg').textContent = ((tempSum)/validCount).toFixed(1);
@@ -723,24 +969,31 @@ function updateDash(d, fromLive){
   document.getElementById('sHum').textContent = tempOk ? hum.toFixed(1)  : '--';
   if(soilOk && (soilHigh===null||soil>soilHigh)){soilHigh=soil;document.getElementById('sHi').textContent=soil.toFixed(1);}
 
-  // Charts — only plot valid sensor data
+  // ── CHARTS ──
   if(soilOk){
-    soilChart.data.labels.push(timeStr);
-    soilChart.data.datasets[0].data.push(parseFloat(soil.toFixed(1)));
-    if(soilChart.data.labels.length>20){soilChart.data.labels.shift();soilChart.data.datasets[0].data.shift();}
-    soilChart.update();
+    pushChart(soilChart, timeStr, parseFloat(soil.toFixed(1)));
+    // Weekly
+    const di=(ts.getDay()||7)-1;
+    const tr=readings.filter(r=>r.dateStr===dateStr&&r.soilOk);
+    if(tr.length>0){
+      wkChart.data.datasets[0].data[di]=parseFloat((tr.reduce((a,r)=>a+r.soil,0)/tr.length).toFixed(1));
+      wkChart.update();
+    }
   }
   document.getElementById('sPts').textContent=soilChart.data.labels.length+' pts';
 
   if(tempOk){
-    thChart.data.labels.push(timeStr);
-    thChart.data.datasets[0].data.push(parseFloat(temp.toFixed(1)));
-    thChart.data.datasets[1].data.push(parseFloat(hum.toFixed(1)));
-    if(thChart.data.labels.length>20){thChart.data.labels.shift();thChart.data.datasets[0].data.shift();thChart.data.datasets[1].data.shift();}
-    thChart.update();
+    pushChart(thChart, timeStr, parseFloat(temp.toFixed(1)), parseFloat(hum.toFixed(1)));
+    pushChart(tempChart, timeStr, parseFloat(temp.toFixed(1)));
+    pushChart(humChart, timeStr, parseFloat(hum.toFixed(1)));
+    pushChart(hiChart, timeStr, parseFloat(hi.toFixed(1)));
   }
   document.getElementById('tPts').textContent=thChart.data.labels.length+' pts';
+  document.getElementById('tmpPts').textContent=tempChart.data.labels.length+' pts';
+  document.getElementById('humPts').textContent=humChart.data.labels.length+' pts';
+  document.getElementById('hiPts').textContent=hiChart.data.labels.length+' pts';
 
+  // History table — now includes HI column
   readings.unshift({timeStr,dateStr,soil,temp,hum,raw,hi,ss,soilOk,tempOk});
   if(readings.length>200)readings.pop();
 
@@ -750,33 +1003,23 @@ function updateDash(d, fromLive){
       <td style="color:${r.soilOk?r.ss.color:'var(--muted)'};font-weight:700">${r.soilOk?r.soil.toFixed(1)+'%':'--'}</td>
       <td style="color:${r.tempOk?'var(--orange)':'var(--muted)'}">${r.tempOk?r.temp.toFixed(1)+'°':'--'}</td>
       <td style="color:${r.tempOk?'var(--blue)':'var(--muted)'}">${r.tempOk?r.hum.toFixed(1)+'%':'--'}</td>
+      <td style="color:${r.tempOk?'var(--purple)':'var(--muted)'}">${r.tempOk?r.hi.toFixed(1)+'°':'--'}</td>
       <td><span class="badge ${r.ss.bc}">${r.ss.cls.replace('s-','').toUpperCase()}</span></td>
     </tr>`).join('');
 
-  // Weekly chart — only valid soil
-  if(soilOk){
-    const di=(ts.getDay()||7)-1;
-    const tr=readings.filter(r=>r.dateStr===dateStr&&r.soilOk);
-    if(tr.length>0){
-      wkChart.data.datasets[0].data[di]=parseFloat((tr.reduce((a,r)=>a+r.soil,0)/tr.length).toFixed(1));
-      wkChart.update();
-    }
-  }
-
-  // Banner
   const soilStr = soilOk ? `Soil:${soil.toFixed(1)}%` : 'Soil:N/A';
   const tempStr = tempOk ? `Temp:${temp.toFixed(1)}°C` : 'Temp:N/A';
   const humStr  = tempOk ? `Hum:${hum.toFixed(1)}%`   : 'Hum:N/A';
-  setBanner(soilOk?ss.color:'#6b8f72',`${fromLive?'Live':'History'} · ${soilStr} · ${tempStr} · ${humStr} · ${timeStr}`);
+  const hiStr   = tempOk ? `HI:${hi.toFixed(1)}°C`    : '';
+  setBanner(soilOk?ss.color:'#6b8f72',`${fromLive?'Live':'History'} · ${soilStr} · ${tempStr} · ${humStr} · ${hiStr} · ${timeStr}`);
   runAI();
 
-  // Alerts & email ONLY on live valid data
   if(fromLive){
     if(isAl && soilOk) checkEmail(soil);
     if(soilOk && soil<30) addAlert('🚨',`Dry soil ${soil.toFixed(1)}% — water now!`,'error');
     if(tempOk && temp>38) addAlert('🌡️',`High temp ${temp.toFixed(1)}°C!`,'warn');
     if(tempOk && hum<25)  addAlert('💧',`Low humidity ${hum.toFixed(1)}%`,'warn');
-    // Warn once if sensor disconnected (live only)
+    if(tempOk && hi>40)   addAlert('🔥',`Danger heat index ${hi.toFixed(1)}°C!`,'warn');
     if(!soilOk) addAlert('⚠️','Soil sensor disconnected (ADC='+raw+')','warn');
     if(!tempOk) addAlert('⚠️','DHT11 disconnected — temp/hum invalid','warn');
   }
@@ -810,52 +1053,31 @@ function startListeners(){
     document.getElementById('cLabel').textContent=ok?'Firebase Connected':'Reconnecting...';
     document.getElementById('liveChip').style.display=ok?'flex':'none';
   });
-
   setBanner('#fbbf24','Loading historical data...');
   setESPWaiting();
 
   db.ref('sensor/moisture').limitToLast(50).once('value', snap => {
-    const keys = [];
-    const entries = [];
-
-    snap.forEach(child => {
-      keys.push(child.key);
-      entries.push(child.val());
-    });
-
-    if (!entries.length) {
+    const keys=[]; const entries=[];
+    snap.forEach(child=>{keys.push(child.key);entries.push(child.val());});
+    if(!entries.length){
       setBanner('#fbbf24','Connected · No historical data — waiting for ESP32...');
-      lastHistoricalKey = null;
-      historicalLoadDone = true;
-      attachLiveListener();
-      return;
+      lastHistoricalKey=null; historicalLoadDone=true; attachLiveListener(); return;
     }
-
-    lastHistoricalKey = keys[keys.length - 1];
-
-    [...entries].reverse().forEach(d => {
-      if (d && d.value !== undefined) updateDash(d, false);
-    });
-
-    historicalLoadDone = true;
+    lastHistoricalKey=keys[keys.length-1];
+    [...entries].reverse().forEach(d=>{if(d&&d.value!==undefined)updateDash(d,false);});
+    historicalLoadDone=true;
     setBanner('#22c55e','Historical data loaded · Waiting for live ESP32...');
     attachLiveListener();
   });
 }
 
 function attachLiveListener(){
-  db.ref('sensor/moisture').limitToLast(1).on('child_added', snap => {
-    const key = snap.key;
-    const d   = snap.val();
-
-    if (!d || d.value === undefined) return;
-
-    if (lastHistoricalKey !== null && key <= lastHistoricalKey) {
-      return;
-    }
-
+  db.ref('sensor/moisture').limitToLast(1).on('child_added', snap=>{
+    const key=snap.key; const d=snap.val();
+    if(!d||d.value===undefined) return;
+    if(lastHistoricalKey!==null&&key<=lastHistoricalKey) return;
     setESPOnline();
-    updateDash(d, true);
+    updateDash(d,true);
   });
 }
 </script>
